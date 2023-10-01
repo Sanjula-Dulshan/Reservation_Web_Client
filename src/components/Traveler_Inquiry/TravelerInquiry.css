@@ -1,0 +1,77 @@
+.inquiries-title {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #000000;
+}
+
+.inquiry-cards {
+  display: flex;
+  flex-direction: column; /* Display cards in a vertical list */
+  align-items: center; /* Center-align cards horizontally */
+}
+
+.inquiry-card {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 20px;
+  width: 80%; /* Adjust the width of the cards as needed */
+  margin: 10px 0; /* Add spacing between cards */
+  display: flex;
+  justify-content: space-between; /* Space elements horizontally */
+  align-items: center; /* Center-align elements vertically */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.inquiry-details {
+  flex: 1; /* Allow details to take available space */
+  text-align: left; /* Align details to the left */
+  padding-right: 20px; /* Add spacing between details and button */
+}
+
+.inquiry-name {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.inquiry-date,
+.inquiry-description,
+.inquiry-telephone {
+  font-size: 16px;
+  margin: 5px 0;
+}
+
+.icon {
+  margin-right: 5px; /* Add spacing between icon and text */
+  font-size: 20px;
+}
+
+.btn {
+  padding: 10px 20px;
+  border-radius: 3px;
+  font-size: 16px;
+  cursor: pointer;
+  width: 100px;
+  margin-top: 10px;
+  border: none;
+}
+
+.btn-pending {
+  background-color: #ff0000;
+  color: #fff;
+}
+
+.btn-resolved {
+  background-color: #00ff00;
+  color: #fff;
+}
+
+.traveler-inquiries {
+  background-image: url("../../../train.jpeg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding: 20px;
+  text-align: center;
+}
