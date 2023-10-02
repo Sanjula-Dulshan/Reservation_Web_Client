@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Modal from "react-modal";
 import "./BookingModal.css";
+import { useNavigate } from "react-router-dom";
 
 Modal.setAppElement("#root"); // Set the root element for accessibility
 
@@ -10,10 +11,12 @@ const BookingModal = ({ isOpen, onRequestClose }) => {
   const [date, setDate] = useState("");
   const [passengers, setPassengers] = useState(1);
 
+  const navigate = useNavigate(); // Use useNavigate instead of useHistory
+
   const handleSubmit = () => {
     // Handle the booking submission here (e.g., send a request to the server)
-    // Close the modal when the booking is successful or canceled
-    onRequestClose();
+    // After successful booking, navigate to the available trains page
+    navigate("/availability");
   };
 
   return (

@@ -7,16 +7,6 @@ body {
   background-color: #f4f4f4;
 }
 
-/* Header styles */
-.header {
-  background-color: #000000;
-  color: #fff;
-  padding: 10px 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
 /* Logo styles */
 .logo {
   width: 50px; /* Adjust the width as needed */
