@@ -1,0 +1,188 @@
+/* PassengerInfo.css (Create a separate CSS file for this component) */
+
+.passenger-info {
+  margin-top: 8%;
+  display: flex;
+  flex-direction: column; /* Change to column layout */
+  gap: 40px;
+  margin-left: 40px;
+}
+.card {
+  border: 1px solid #ddd;
+  padding: 20px;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  width: 90%;
+  box-shadow: inset 0 0 5px #ddd;
+}
+
+.card1 {
+  border: 1px solid #ddd;
+  padding: 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  width: 20%; /* Set the width to 100% for full width */
+}
+.card2 {
+  border: 1px solid #ddd;
+  padding: 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  width: 50%;
+}
+
+.card:hover {
+  background-color: #f0f0f0;
+}
+
+.card-icon {
+  font-size: 24px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.card-title {
+  font-weight: bold;
+  text-align: center;
+}
+
+/* Add your CSS styles for the modal and input fields here */
+
+.modal {
+  background-color: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.input-field {
+  margin-bottom: 20px;
+}
+
+.input-field label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.input-field input,
+.input-field select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.input-field select {
+  cursor: pointer;
+}
+
+.info {
+  font-size: 14px;
+  color: #777;
+}
+
+button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 18px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+/* Style for the summary card */
+.summary-card {
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  border-radius: 5px;
+}
+
+/* Style for summary content */
+.summary-content p {
+  margin: 0;
+  font-weight: bold;
+  line-height: 1.5;
+}
+
+/* PassengerInfo.css */
+
+/* ... (Previous CSS styles) ... */
+
+/* Style the first circle as green (completed step) */
+.circle.completed {
+  background-color: #28a745; /* Green color for the first step */
+}
+
+/* Style the second circle as green (completed step) */
+.step.completed .circle {
+  background-color: #28a745; /* Green color for the second step */
+}
+
+/* Style the third circle as blue (active/processing step) */
+.circle.active {
+  background-color: #007bff; /* Blue color for the third step */
+}
+
+/* Style the fourth circle as gray (disabled step) */
+.circle.disabled {
+  background-color: #ccc; /* Gray color for disabled steps */
+  color: #000; /* Text color for disabled steps */
+}
+
+/* Styling for the total price section */
+.total-price-section {
+  background-color: #000; /* Black background color */
+  color: #fff; /* White text color */
+  padding: 10px; /* Add padding for spacing */
+  border-radius: 5px;
+  width: 50%; /* Rounded corners */
+}
+
+/* Styling for the total price title */
+.total-price-title {
+  font-weight: bold;
+}
+
+/* Styling for the total price amount */
+.total-price {
+  font-size: 18px; /* Adjust font size as needed */
+}
+
+/* Style the Proceed button */
+.confirm-button {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.confirm-button .btn-primary {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 12px 20px;
+  font-size: 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: 70%;
+  width: 20%;
+}
+
+.confirm-button .btn-primary:hover {
+  background-color: #0056b3;
+}

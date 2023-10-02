@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import "./AvailableTrains.css"; // Import the CSS file
+import { useNavigate } from "react-router-dom";
 
 const AvailableTrains = () => {
   const [selectedTrain, setSelectedTrain] = useState(null);
+  const navigate = useNavigate();
+
   const steps = [
     "Home",
     "Check Availability",
@@ -32,6 +35,9 @@ const AvailableTrains = () => {
 
   const handleTrainClick = (train) => {
     setSelectedTrain(train);
+  };
+  const handleProceedClick = () => {
+    navigate("/confirmation");
   };
 
   return (
@@ -86,7 +92,9 @@ const AvailableTrains = () => {
 
       {selectedTrain && (
         <div className="proceed-button">
-          <button className="btn btn-primary">Proceed</button>
+          <button className="btn btn-primary" onClick={handleProceedClick}>
+            Proceed
+          </button>
         </div>
       )}
     </div>

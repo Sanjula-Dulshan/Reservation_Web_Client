@@ -6,6 +6,7 @@ import Home from "./components/Dashboard/Home";
 import TravelerInquiries from "./components/Traveler_Inquiry/TravelerInquiry";
 import AvailableTrains from "./components/Train_Availability/AvailableTrains";
 import Header from "./components/Header/Header";
+import Confirmation from "./components/Confirmation/Confirmation";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/" exact element={<Home />} />
         <Route path="/travelers" element={<TravelerInquiries />} />
         <Route path="/availability" element={<AvailableTrains />} />
+        <Route path="/confirmation" element={<Confirmation />} />
       </Routes>
     </BrowserRouter>
   );
