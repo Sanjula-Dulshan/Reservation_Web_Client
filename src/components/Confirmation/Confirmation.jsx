@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import "./Confirmation.css";
-import PassengerModal from "../Passenger_Info/PassengerModal";
+import Modal from "react-modal";
+import trainGif from "./train2.gif";
+import { useNavigate } from "react-router-dom";
+
+Modal.setAppElement("#root");
 
 const PassengerInfo = () => {
   const steps = [
@@ -9,18 +13,29 @@ const PassengerInfo = () => {
     { title: "Confirmation", status: "active" },
     { title: "Ticket Summary", status: "disabled" },
   ];
-  const [isPassengerModalOpen, setIsPassengerModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
 
-  // Function to open the passenger modal
-  const openPassengerModal = () => {
-    setIsPassengerModalOpen(true);
+  const openModal = () => {
+    setIsModalOpen(true);
   };
 
-  // Function to close the passenger modal
-  const closePassengerModal = () => {
-    setIsPassengerModalOpen(false);
+  const closeModal = () => {
+    setIsModalOpen(false);
+    navigate("/");
   };
 
+  const handleConfirmClick = () => {
+    // Handle booking confirmation logic here
+
+    // Display the modal
+    openModal();
+
+    // After a delay, close the modal (you can adjust the delay)
+    setTimeout(() => {
+      closeModal();
+    }, 3000); // Close the modal after 3 seconds (adjust as needed)
+  };
   return (
     <div>
       <div className="progress-container">
@@ -68,8 +83,23 @@ const PassengerInfo = () => {
           </div>
 
           <div className="confirm-button">
-            <button className="btn btn-primary">CONFIRM</button>
+            <button className="btn btn-primary" onClick={handleConfirmClick}>
+              CONFIRM
+            </button>
           </div>
+          {/* Modal for booking success */}
+          <Modal
+            isOpen={isModalOpen}
+            onRequestClose={closeModal}
+            className="success-modal"
+          >
+            <div className="modal-content">
+              <h2>Booking Successful!</h2>
+              <img src={trainGif} alt="Success GIF" />
+
+              <p>Your booking has been confirmed.</p>
+            </div>
+          </Modal>
         </div>
       </div>
     </div>

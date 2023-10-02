@@ -160,12 +160,14 @@ main {
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  width: 30%;
   transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
 }
 
 .btn-primary {
   background-color: #007bff;
   color: #fff;
+  width: 70%;
 }
 
 .btn-primary:hover {

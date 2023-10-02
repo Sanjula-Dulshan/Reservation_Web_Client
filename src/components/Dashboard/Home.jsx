@@ -16,16 +16,6 @@ export default function Home() {
 
   return (
     <div className="homepage">
-      {/* Header Section */}
-      <header className="header">
-        <i className="fas fa-train train-icon"></i>
-        <nav className="nav">
-          <a href="/">Home</a>
-          <a href="/about">About</a>
-          <a href="/contact">Contact</a>
-        </nav>
-      </header>
-
       {/* Hero Section */}
       <section className="hero">
         <div className="hero-content">

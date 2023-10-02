@@ -186,3 +186,35 @@ button:hover {
 .confirm-button .btn-primary:hover {
   background-color: #0056b3;
 }
+
+/* YourComponent.css */
+
+/* Styles for the modal */
+.success-modal {
+  width: 80%;
+  max-width: 400px;
+  margin: 0 auto;
+  background-color: #fff;
+  border-radius: 5px;
+  padding: 20px;
+  margin-top: 50px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+/* Styles for the modal content */
+.modal-content {
+  text-align: center;
+}
+
+/* Styles for the success GIF */
+.modal-content img {
+  max-width: 100%;
+  margin: 20px 0;
+}
+
+h2 {
+  text-align: center;
+  margin-top: 10%;
+  color: green; /* Add this line to set the text color to green */
+}
