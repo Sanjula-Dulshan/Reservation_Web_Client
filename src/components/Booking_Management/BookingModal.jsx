@@ -2,21 +2,41 @@ import React, { useState } from "react";
 import Modal from "react-modal";
 import "./BookingModal.css";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { BASE } from "../constants";
 
-Modal.setAppElement("#root"); // Set the root element for accessibility
+Modal.setAppElement("#root"); // For modal accessibility
 
 const BookingModal = ({ isOpen, onRequestClose }) => {
-  const [startStation, setStartStation] = useState("");
-  const [endStation, setEndStation] = useState("");
+  const [start, setStartStation] = useState("");
+  const [end, setEndStation] = useState("");
   const [date, setDate] = useState("");
-  const [passengers, setPassengers] = useState(1);
+  const [noOfSeats, setNoOfSeats] = useState(1);
+  const [nic, setNic] = useState("");
+  const navigate = useNavigate();
+  const handleSubmit = async () => {
+    try {
+      const data = {
+        start,
+        end,
+        date,
+        noOfSeats,
+      };
 
-  const navigate = useNavigate(); // Use useNavigate instead of useHistory
+      // URL of the API endpoint where you want to send the data
+      const apiUrl = `${BASE}/api/train/search`;
 
-  const handleSubmit = () => {
-    // Handle the booking submission here (e.g., send a request to the server)
-    // After successful booking, navigate to the available trains page
-    navigate("/availability");
+      const response = await axios.post(apiUrl, data);
+
+      if (response.status === 200) {
+        console.log("Booking successful:", response.data);
+        navigate("/availability");
+      } else {
+        console.error("Booking failed:", response.data);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   return (
@@ -29,9 +49,16 @@ const BookingModal = ({ isOpen, onRequestClose }) => {
         <h2>Seat Booking</h2>
       </div>
       <div className="booking-form">
+        <label>NIC</label>
+        <input
+          type="text"
+          value={nic}
+          onChange={(e) => setNic(e.target.value)}
+          className="input-field"
+        />
         <label>Start Station:</label>
         <select
-          value={startStation}
+          value={start}
           onChange={(e) => setStartStation(e.target.value)}
           className="input-field"
         >
@@ -49,7 +76,7 @@ const BookingModal = ({ isOpen, onRequestClose }) => {
 
         <label>End Station:</label>
         <select
-          value={endStation}
+          value={end}
           onChange={(e) => setEndStation(e.target.value)}
           className="input-field"
         >
@@ -76,8 +103,8 @@ const BookingModal = ({ isOpen, onRequestClose }) => {
         <label>Number of Passengers:</label>
         <input
           type="number"
-          value={passengers}
-          onChange={(e) => setPassengers(e.target.value)}
+          value={noOfSeats}
+          onChange={(e) => setNoOfSeats(e.target.value)}
           className="input-field"
         />
 
