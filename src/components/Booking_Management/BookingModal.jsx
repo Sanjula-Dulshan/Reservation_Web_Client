@@ -4,6 +4,7 @@ import "./BookingModal.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { BASE } from "../constants";
+import { getTimeFromISOString } from "../utils";
 
 Modal.setAppElement("#root"); // For modal accessibility
 
@@ -12,15 +13,25 @@ const BookingModal = ({ isOpen, onRequestClose }) => {
   const [end, setEndStation] = useState("");
   const [date, setDate] = useState("");
   const [noOfSeats, setNoOfSeats] = useState(1);
+  const [ticketPrice, setTicketPrice] = useState(0);
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
+
   const [nic, setNic] = useState("");
   const navigate = useNavigate();
   const handleSubmit = async () => {
     try {
+      const formattedStartTime = getTimeFromISOString(startTime);
+      const formattedEndTime = getTimeFromISOString(endTime);
       const data = {
         start,
         end,
         date,
         noOfSeats,
+        nic,
+        ticketPrice,
+        endTime,
+        startTime,
       };
 
       // URL of the API endpoint where you want to send the data
@@ -30,7 +41,15 @@ const BookingModal = ({ isOpen, onRequestClose }) => {
 
       if (response.status === 200) {
         console.log("Booking successful:", response.data);
-        navigate("/availability");
+
+        const trainListJSONString = JSON.stringify(response.data.trainList);
+
+        console.log("Train List Query String:", trainListJSONString);
+        navigate(
+          `/availability?nic=${nic}&ticketPrice=${
+            response.data.ticketPrice
+          }&trainList=${encodeURIComponent(trainListJSONString)}`
+        );
       } else {
         console.error("Booking failed:", response.data);
       }

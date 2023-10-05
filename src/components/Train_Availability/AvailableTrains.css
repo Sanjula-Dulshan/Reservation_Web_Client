@@ -48,18 +48,17 @@ tr:hover {
 /* Style the Proceed button */
 .proceed-button {
   text-align: center;
-  margin-top: 20px;
 }
 
 .proceed-button .btn-primary {
   background-color: #007bff;
   color: #fff;
   border: none;
-  padding: 12px 20px;
-  font-size: 18px;
+  padding: 8px 10px;
+  font-size: 15px;
   border-radius: 5px;
   cursor: pointer;
-  margin-left: 75%;
+  margin-right: 30%;
 }
 
 .proceed-button .btn-primary:hover {

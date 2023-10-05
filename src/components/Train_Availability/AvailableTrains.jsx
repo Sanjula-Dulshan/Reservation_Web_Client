@@ -1,10 +1,39 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./AvailableTrains.css"; // Import the CSS file
 import { useNavigate } from "react-router-dom";
+
+import { useLocation } from "react-router-dom";
 
 const AvailableTrains = () => {
   const [selectedTrain, setSelectedTrain] = useState(null);
   const navigate = useNavigate();
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const [selectedRow, setSelectedRow] = useState(null);
+  const [isRowSelected, setIsRowSelected] = useState(false);
+
+  const formatTime = (timeString) => {
+    const options = { hour: "numeric", minute: "numeric", hour12: true };
+    return new Date(timeString).toLocaleTimeString(undefined, options);
+  };
+  // Access the data from the URL parameters
+
+  const nic = queryParams.get("nic");
+  const ticketPrice = queryParams.get("ticketPrice");
+
+  // Parse the trainList query parameter into an array
+  const trainList = JSON.parse(queryParams.get("trainList"));
+  trainList.push = {
+    ticketPrice,
+  };
+
+  console.log("Train List new:", trainList);
+
+  // Now you can use start, end, date, seats, and trainList in your component
+  console.log("Nic:", nic);
+  console.log("Ticket Price:", ticketPrice);
+
+  console.log("Train List:", trainList);
 
   const steps = [
     "Home",
@@ -14,30 +43,29 @@ const AvailableTrains = () => {
     "Ticket Summary",
   ];
 
-  const trains = [
-    {
-      id: 1,
-      name: "Express Train 1",
-      departs: "05:25",
-      arrives: "09:00",
-      availableSeats: 104,
-      price: "LKR 1,600.00",
-    },
-    {
-      id: 1,
-      name: "Express Train 1",
-      departs: "05:25",
-      arrives: "09:00",
-      availableSeats: 104,
-      price: "LKR 1,600.00",
-    },
-  ];
-
+  // const handleTrainClick = (train) => {
+  //   if (selectedTrain === train) {
+  //     // If the clicked row is already selected, unselect it
+  //     setSelectedTrain(null);
+  //   } else {
+  //     setSelectedTrain(train); // Otherwise, select the clicked row
+  //   }
+  // };
   const handleTrainClick = (train) => {
     setSelectedTrain(train);
+    setSelectedRow(train);
+    setIsRowSelected(true); // Enable the button when a row is clicked
   };
-  const handleProceedClick = () => {
-    navigate("/confirmation");
+
+  const handleProceedClick = (selectedRow) => {
+    if (selectedRow) {
+      // Build the URL with query parameters
+      const nextUrl = `/confirmation?trainId=${selectedRow.trainId}&trainName=${selectedRow.trainName}&startTime=${selectedRow.startTime}&endTime=${selectedRow.endTime}&noOfSeats=${selectedRow.noOfSeats}`;
+
+      console.log("Next URL:", nextUrl);
+      // Navigate to the next page with the data
+      navigate(nextUrl);
+    }
   };
 
   return (
@@ -69,34 +97,36 @@ const AvailableTrains = () => {
               <th>Departs</th>
               <th>Arrives</th>
               <th>Available Seats</th>
-              <th>Price</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
-            {trains.map((train, index) => (
+            {trainList.map((train) => (
               <tr
-                key={index}
+                key={train.trainId}
                 onClick={() => handleTrainClick(train)}
                 className={selectedTrain === train ? "selected" : ""}
               >
-                <td>{train.name}</td>
-                <td>{train.departs}</td>
-                <td>{train.arrives}</td>
-                <td>{train.availableSeats}</td>
-                <td>{train.price}</td>
+                <td>{train.trainName}</td>
+                <td>{formatTime(train.startTime)}</td>
+                <td>{formatTime(train.endTime)}</td>
+                <td>{train.noOfSeats}</td>
+                <td>
+                  <div className="proceed-button">
+                    <button
+                      className="btn btn-primary"
+                      onClick={handleProceedClick}
+                      disabled={!isRowSelected} // Disable the button when no row is selected
+                    >
+                      Proceed
+                    </button>
+                  </div>
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-
-      {selectedTrain && (
-        <div className="proceed-button">
-          <button className="btn btn-primary" onClick={handleProceedClick}>
-            Proceed
-          </button>
-        </div>
-      )}
     </div>
   );
 };

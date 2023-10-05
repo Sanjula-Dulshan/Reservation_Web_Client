@@ -3,6 +3,7 @@ import "./Confirmation.css";
 import Modal from "react-modal";
 import trainGif from "./train2.gif";
 import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 Modal.setAppElement("#root");
 
@@ -15,6 +16,20 @@ const PassengerInfo = () => {
   ];
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+
+  const trainId = queryParams.get("trainId");
+  const trainName = queryParams.get("trainName");
+  const startTime = queryParams.get("startTime");
+  const endTime = queryParams.get("endTime");
+  const noOfSeats = queryParams.get("noOfSeats");
+
+  console.log("Train ID:", trainId);
+  console.log("Train Name:", trainName);
+  console.log("Start Time:", startTime);
+  console.log("End Time:", endTime);
+  console.log("No of Seats:", noOfSeats);
 
   const openModal = () => {
     setIsModalOpen(true);
