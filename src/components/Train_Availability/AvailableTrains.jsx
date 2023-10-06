@@ -20,6 +20,8 @@ const AvailableTrains = () => {
 
   const nic = queryParams.get("nic");
   const ticketPrice = queryParams.get("ticketPrice");
+  const totalPrice = queryParams.get("totalPrice");
+  const seats = queryParams.get("seats");
 
   // Parse the trainList query parameter into an array
   const trainList = JSON.parse(queryParams.get("trainList"));
@@ -32,6 +34,8 @@ const AvailableTrains = () => {
   // Now you can use start, end, date, seats, and trainList in your component
   console.log("Nic:", nic);
   console.log("Ticket Price:", ticketPrice);
+  console.log("Total Price:", totalPrice);
+  console.log("Seats:", seats);
 
   console.log("Train List:", trainList);
 
@@ -57,12 +61,13 @@ const AvailableTrains = () => {
     setIsRowSelected(true); // Enable the button when a row is clicked
   };
 
-  const handleProceedClick = (selectedRow) => {
+  const handleProceedClick = () => {
     if (selectedRow) {
       // Build the URL with query parameters
-      const nextUrl = `/confirmation?trainId=${selectedRow.trainId}&trainName=${selectedRow.trainName}&startTime=${selectedRow.startTime}&endTime=${selectedRow.endTime}&noOfSeats=${selectedRow.noOfSeats}`;
+      const nextUrl = `/confirmation?trainId=${selectedRow.trainId}&trainName=${selectedRow.trainName}&startTime=${selectedRow.startTime}&endTime=${selectedRow.endTime}&noOfSeats=
+      ${selectedRow.noOfSeats}&nic=${nic}&ticketPrice=${ticketPrice}&totalPrice=${totalPrice}&start=${selectedRow.start}&end=${selectedRow.end}&seats=${seats}
+      `;
 
-      console.log("Next URL:", nextUrl);
       // Navigate to the next page with the data
       navigate(nextUrl);
     }

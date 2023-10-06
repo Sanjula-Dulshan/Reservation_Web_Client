@@ -24,12 +24,24 @@ const PassengerInfo = () => {
   const startTime = queryParams.get("startTime");
   const endTime = queryParams.get("endTime");
   const noOfSeats = queryParams.get("noOfSeats");
+  const ticketPrice = queryParams.get("ticketPrice");
+  const totalPrice = queryParams.get("totalPrice");
+  const nic = queryParams.get("nic");
+  const start = queryParams.get("start");
+  const end = queryParams.get("end");
+  const seats = queryParams.get("seats");
 
-  console.log("Train ID:", trainId);
-  console.log("Train Name:", trainName);
-  console.log("Start Time:", startTime);
-  console.log("End Time:", endTime);
-  console.log("No of Seats:", noOfSeats);
+  const formatTime = (timeString) => {
+    const options = { hour: "numeric", minute: "numeric", hour12: true };
+    return new Date(timeString).toLocaleTimeString(undefined, options);
+  };
+
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
+  const formattedStart = capitalizeFirstLetter(start);
+  const formattedEnd = capitalizeFirstLetter(end);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -70,31 +82,23 @@ const PassengerInfo = () => {
           <div className="card-title">Passenger Information</div>
         </div>
 
-        {/* Render the passenger modal */}
-        {/* {isPassengerModalOpen && (
-          <PassengerModal
-            isOpen={isPassengerModalOpen}
-            onRequestClose={closePassengerModal}
-          />
-        )} */}
-
         <div className="card">
           <div className="card2 summary-card">
             <div className="card-title">Summary</div>
             <div className="summary-content">
-              <p>Train Name & No: 8057 Express Train</p>
-              <p>Start Station: Matara</p>
-              <p>End Station: Colombo Fort</p>
-              <p>Departure Date:2023-10-17</p>
-              <p>Time Start - End:05:56 - 09:29</p>
-              <p>No of Passengers: 2</p>
-              <p>Train Class Selected: Air Conditioned Saloon</p>
-              <p>Price One Person:1400</p>
+              <p>Train Name : {trainName}</p>
+              <p>Start Station: {formattedStart}</p>
+              <p>End Station: {formattedEnd}</p>
+
+              <p>Time Start:{formatTime(startTime)}</p>
+              <p>Time End:{formatTime(endTime)}</p>
+
+              <p>Price One Person:{ticketPrice}</p>
             </div>
           </div>
           <div className="total-price-section">
             <div className="total-price-title">Total Price</div>
-            <div className="total-price">LKR 2800</div>
+            <div className="total-price">{totalPrice}</div>
           </div>
 
           <div className="confirm-button">

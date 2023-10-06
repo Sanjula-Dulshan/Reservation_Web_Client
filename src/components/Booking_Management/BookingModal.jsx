@@ -14,8 +14,10 @@ const BookingModal = ({ isOpen, onRequestClose }) => {
   const [date, setDate] = useState("");
   const [noOfSeats, setNoOfSeats] = useState(1);
   const [ticketPrice, setTicketPrice] = useState(0);
+  const [totalPrice, setTotalPrice] = useState(0);
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
+  const [seats, setSeats] = useState([]);
 
   const [nic, setNic] = useState("");
   const navigate = useNavigate();
@@ -32,6 +34,8 @@ const BookingModal = ({ isOpen, onRequestClose }) => {
         ticketPrice,
         endTime,
         startTime,
+        totalPrice,
+        seats,
       };
 
       // URL of the API endpoint where you want to send the data
@@ -46,9 +50,11 @@ const BookingModal = ({ isOpen, onRequestClose }) => {
 
         console.log("Train List Query String:", trainListJSONString);
         navigate(
-          `/availability?nic=${nic}&ticketPrice=${
+          `/availability?nic=${nic}&seats=${seats}&ticketPrice=${
             response.data.ticketPrice
-          }&trainList=${encodeURIComponent(trainListJSONString)}`
+          }&trainList=${encodeURIComponent(trainListJSONString)}&totalPrice=${
+            response.data.totalPrice
+          }`
         );
       } else {
         console.error("Booking failed:", response.data);
