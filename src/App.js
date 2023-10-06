@@ -7,6 +7,7 @@ import TravelerInquiries from "./components/Traveler_Inquiry/TravelerInquiry";
 import AvailableTrains from "./components/Train_Availability/AvailableTrains";
 import Header from "./components/Header/Header";
 import Confirmation from "./components/Confirmation/Confirmation";
+import Schedule from "./components/Train_Schedule/TrainSchedule";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/travelers" element={<TravelerInquiries />} />
         <Route path="/availability" element={<AvailableTrains />} />
         <Route path="/confirmation" element={<Confirmation />} />
+        <Route path="/schedule" element={<Schedule />} />
       </Routes>
     </BrowserRouter>
   );
