@@ -1,25 +1,24 @@
 import { React, useState } from "react";
 import Modal from "react-modal";
 import trainGif from "./train2.gif";
-//import "./TrainSchedule.css";
-// import { useNavigate } from "react-router-dom";
-// import { useLocation } from "react-router-dom";
+import axios from "axios";
 import { BASE } from "../constants";
 
 export default function TrainSchedule() {
-  const [stationRows, setStationRows] = useState([
-    { stationName: "", arrivalTime: "" },
-  ]);
+  const [stations, setStations] = useState([{ stationName: "", time: "" }]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [trainName, setTrainName] = useState("");
+  const [isActive, setIsActive] = useState(true);
+  const [seatCount, setSeatCount] = useState(0);
 
   const addRow = () => {
-    setStationRows([...stationRows, { stationName: "", arrivalTime: "" }]);
+    setStations([...stations, { stationName: "", time: "" }]);
   };
 
   const removeRow = (index) => {
-    const updatedRows = [...stationRows];
+    const updatedRows = [...stations];
     updatedRows.splice(index, 1);
-    setStationRows(updatedRows);
+    setStations(updatedRows);
   };
 
   const openModal = () => {
@@ -34,29 +33,69 @@ export default function TrainSchedule() {
   const saveTrainSchedule = async (e) => {
     e.preventDefault();
 
-    // const response = await fetch(BASE + "/api/trainSchedule", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify({
-    //     trainName: e.target.trainName.value,
-    //     seatCount: e.target.seatCount.value,
-    //     isActive: e.target.isActive.value,
-    //     stations: stationRows,
-    //   }),
-    // });
-    // const data = await response.json();
+    try {
+      if (isActive === "true") {
+        setIsActive(true);
+      } else {
+        setIsActive(false);
+      }
 
-    // Display the modal
-    openModal();
+      //Convert time to ISO String
+      const formattedStations = stations.map((row) => {
+        const [time] = row.time.split(" "); // Splitting "HH:mm AM/PM"
+        let [hours, minutes] = time.split(":").map(Number);
+        const period = row.time.split(" ")[1]; // AM or PM
 
-    // After a delay, close the modal (you can adjust the delay)
-    setTimeout(() => {
-      closeModal();
-    }, 3000); // Close the modal after 3 seconds (adjust as needed)
+        // Adjust hours for PM
+        if (period === "PM" && hours !== 12) {
+          hours += 12;
+        } else if (period === "AM" && hours === 12) {
+          hours = 0;
+        }
 
-    //console.log(data);
+        // Create a Date object with the current date and the parsed time
+        const currentDate = new Date();
+        currentDate.setHours(hours, minutes, 0, 0);
+
+        // Get the timezone offset in minutes and convert it to milliseconds
+        const timezoneOffsetMs = currentDate.getTimezoneOffset() * 60 * 1000;
+
+        // Adjust the time to include the timezone offset
+        const isoString = new Date(
+          currentDate - timezoneOffsetMs
+        ).toISOString();
+
+        return {
+          stationName: row.stationName,
+          time: isoString,
+        };
+      });
+
+      const data = {
+        trainName,
+        isActive,
+        seatCount,
+        stations: formattedStations,
+      };
+
+      const apiUrl = `${BASE}/api/train`;
+
+      const response = await axios.post(apiUrl, data);
+
+      if (response.status === 201) {
+        // Display the modal
+        openModal();
+
+        // After a delay, close the modal (you can adjust the delay)
+        setTimeout(() => {
+          closeModal();
+        }, 3000);
+      }
+
+      console.log("Data saved successfully:", response.data);
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   return (
@@ -76,9 +115,11 @@ export default function TrainSchedule() {
                   </label>
                   <input
                     type="text"
+                    value={trainName}
                     className="form-control"
                     id="trainName"
                     placeholder="Enter Train Name"
+                    onChange={(e) => setTrainName(e.target.value)}
                     required
                   />
                 </div>
@@ -92,6 +133,7 @@ export default function TrainSchedule() {
                     id="seatCount"
                     placeholder="Enter Seat Count"
                     min="10"
+                    onChange={(e) => setSeatCount(e.target.value)}
                     required
                   />
                 </div>
@@ -100,38 +142,17 @@ export default function TrainSchedule() {
                     Active Status
                   </label>
                   {/* Add Dropdown */}
-                  <select className="form-control" id="isActive">
+                  <select
+                    className="form-control"
+                    id="isActive"
+                    value={isActive}
+                    onChange={(e) => setIsActive(e.target.value)}
+                  >
                     <option value="true">Active</option>
                     <option value="false">Inactive</option>
                   </select>
                 </div>
-                {/* <div className="row">
-                  <div className="col-md-6 mb-3">
-                    <label htmlFor="stationName" className="form-label">
-                      Station Name
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="stationName"
-                      placeholder="Enter Station Name"
-                      required
-                    />
-                  </div>
-                  <div className="col-md-6 mb-3">
-                    <label htmlFor="arrivalTime" className="form-label">
-                      Arrival Time
-                    </label>
-                    <input
-                      type="time"
-                      className="form-control"
-                      id="arrivalTime"
-                      placeholder="Enter Arrival Time"
-                      required
-                    />
-                  </div>
-                </div> */}
-                {stationRows.map((row, index) => (
+                {stations.map((row, index) => (
                   <div className="row mb-3" key={index}>
                     <div className="col-md-6 mb-3">
                       <label htmlFor="stationName" className="form-label">
@@ -144,14 +165,14 @@ export default function TrainSchedule() {
                         required
                         value={row.stationName}
                         onChange={(e) => {
-                          const updatedRows = [...stationRows];
+                          const updatedRows = [...stations];
                           updatedRows[index].stationName = e.target.value;
-                          setStationRows(updatedRows);
+                          setStations(updatedRows);
                         }}
                       />
                     </div>
                     <div className="col-md-4 mb-3">
-                      <label htmlFor="arrivalTime" className="form-label">
+                      <label htmlFor="time" className="form-label">
                         Arrival Time
                       </label>
                       <input
@@ -159,11 +180,11 @@ export default function TrainSchedule() {
                         className="form-control"
                         placeholder="Enter Arrival Time"
                         required
-                        value={row.arrivalTime}
+                        value={row.time}
                         onChange={(e) => {
-                          const updatedRows = [...stationRows];
-                          updatedRows[index].arrivalTime = e.target.value;
-                          setStationRows(updatedRows);
+                          const updatedRows = [...stations];
+                          updatedRows[index].time = e.target.value;
+                          setStations(updatedRows);
                         }}
                       />
                     </div>
