@@ -8,11 +8,13 @@ import AvailableTrains from "./components/Train_Availability/AvailableTrains";
 import Header from "./components/Header/Header";
 import Confirmation from "./components/Confirmation/Confirmation";
 import Register from "./components/Register/Register";
+import { ReactNotifications } from "react-notifications-component";
 
 function App() {
   return (
     <BrowserRouter>
       <Header />
+      <ReactNotifications />
       <Routes>
         <Route path="/" exact element={<Home />} />
         <Route path="/travelers" element={<TravelerInquiries />} />

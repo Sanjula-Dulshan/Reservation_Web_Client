@@ -3,9 +3,40 @@ import "./TravelerInquiry.css";
 import { FaIdCard, FaEnvelope } from "react-icons/fa";
 import axios from "axios";
 import { BASE } from "../constants";
+import Modal from "react-modal";
 
 const TravelerInquiries = () => {
   const [users, setUsers] = useState([]);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const [updateData, setUpdateData] = useState({
+    name: "",
+    email: "",
+  });
+
+  const openUpdateModal = (data) => {
+    setIsUpdateModalOpen(true);
+    setUpdateData(data); // Set the data to update
+  };
+
+  const closeUpdateModal = () => {
+    setIsUpdateModalOpen(false);
+  };
+
+  const handleSave = () => {
+    const updatedUserData = {
+      name: updateData.name,
+      email: updateData.email,
+    };
+
+    axios
+      .put(`${BASE}/api/user/${updateData.nic}`, updatedUserData)
+      .then((response) => {
+        console.log("User updated:", response.data);
+      })
+      .catch((error) => {
+        console.error("Error updating user:", error);
+      });
+  };
 
   useEffect(() => {
     axios
@@ -46,11 +77,59 @@ const TravelerInquiries = () => {
               </p>
             </div>
             <div className="button-container">
-              <button className="update-button">Update</button>
+              <button
+                className="update-button"
+                onClick={() => openUpdateModal(user)}
+              >
+                Update
+              </button>
               <button className="delete-button">Delete</button>
             </div>
           </div>
         ))}
+        <Modal isOpen={isUpdateModalOpen} onRequestClose={closeUpdateModal}>
+          <h2>Update User</h2>
+          <form>
+            <div className="form-group">
+              <label htmlFor="name">Name</label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                value={updateData.name}
+                onChange={(e) =>
+                  setUpdateData({ ...updateData, name: e.target.value })
+                }
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="email">Email</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={updateData.email}
+                onChange={(e) =>
+                  setUpdateData({ ...updateData, email: e.target.value })
+                }
+              />
+            </div>
+            {/* Add other form fields */}
+            <div className="button-container">
+              <button
+                type="submit"
+                className="btn btn-primary"
+                onClick={handleSave}
+              >
+                Save
+              </button>
+
+              <button className="btn btn-danger" onClick={closeUpdateModal}>
+                Cancel
+              </button>
+            </div>
+          </form>
+        </Modal>
       </div>
     </div>
   );

@@ -5,8 +5,9 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { BASE } from "../constants";
 import { getTimeFromISOString } from "../utils";
-
-Modal.setAppElement("#root"); // For modal accessibility
+import WarningModal from "./WarningModal";
+import { Store } from "react-notifications-component";
+Modal.setAppElement("#root");
 
 const BookingModal = ({ isOpen, onRequestClose }) => {
   const [start, setStartStation] = useState("");
@@ -18,11 +19,49 @@ const BookingModal = ({ isOpen, onRequestClose }) => {
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
   const [seats, setSeats] = useState([]);
+  const [showWarning, setShowWarning] = useState(false);
 
   const [nic, setNic] = useState("");
   const navigate = useNavigate();
   const handleSubmit = async () => {
     try {
+      // Check if the reservation date is within 30 days from the booking date
+      const bookingDate = new Date(date);
+      const currentDate = new Date();
+      const thirtyDaysFromNow = new Date(currentDate);
+      thirtyDaysFromNow.setDate(currentDate.getDate() + 30);
+
+      // Check if the reservation date is within 30 days from the booking date
+      if (new Date(date) > thirtyDaysFromNow) {
+        setShowWarning(true); // Show the warning modal
+        return;
+      }
+
+      // Check if the number of seats is greater than 4
+      if (noOfSeats > 4) {
+        // Store.addNotification({
+        //   title: "You are not allowed!",
+        //   message:
+        //     "You are not allowed to access this page! Please login as Supervisor or Co-Supervisor",
+        //   animationIn: ["animate__animated", "animate__fadeIn"],
+        //   animationOut: ["animate__animated", "animate__fadeOut"],
+        //   type: "danger",
+        //   insert: "top",
+        //   container: "top-right",
+
+        //   dismiss: {
+        //     duration: 2500,
+        //     onScreen: true,
+        //     showIcon: true,
+        //   },
+
+        //   width: 400,
+        // });
+        alert("You are not allowed to book more than 4 seats!");
+        return;
+      }
+
+      // Proceed with booking if all checks pass
       const formattedStartTime = getTimeFromISOString(startTime);
       const formattedEndTime = getTimeFromISOString(endTime);
       const data = {
@@ -140,6 +179,10 @@ const BookingModal = ({ isOpen, onRequestClose }) => {
         >
           Book Seat
         </button>
+        <WarningModal
+          isOpen={showWarning}
+          onRequestClose={() => setShowWarning(false)}
+        />
       </div>
     </Modal>
   );
