@@ -26,7 +26,8 @@ export default function All_Train_Schedules() {
   }, []);
 
   //Update Train Schedule with id
-  const updateSchedule = (e) => {
+  const updateSchedule = (id) => {
+    localStorage.setItem("selectedScheduleId", id);
     navigate("/updateschedule");
   };
 
@@ -112,7 +113,10 @@ export default function All_Train_Schedules() {
             </div>
             <div className="row">
               <div className="col">
-                <button className="update-btn" onClick={updateSchedule}>
+                <button
+                  className="update-btn"
+                  onClick={() => updateSchedule(schedule.id)}
+                >
                   Update
                 </button>
               </div>
