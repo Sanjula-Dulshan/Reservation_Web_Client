@@ -6,53 +6,42 @@ import { IoIosTime } from "react-icons/io";
 import { RiMapPinTimeFill } from "react-icons/ri";
 import { MdAirlineSeatReclineExtra } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { BASE } from "../constants";
 
 export default function All_Train_Schedules() {
-  const [schedules, setSchedules] = useState([
-    {
-      id: 1,
-      name: "Train 1",
-      start: "Matara",
-      end: "Colombo",
-      seatCount: "1700",
-      startTime: "10.00",
-      endTime: "12.00",
-      isActive: true,
-    },
-    {
-      id: 2,
-      name: "Train 2",
-      start: "Matara",
-      end: "Kandy",
-      seatCount: "2500",
-      startTime: "08.00",
-      endTime: "13.00",
-      isActive: false,
-    },
-    {
-      id: 3,
-      name: "Train 3",
-      start: "Colombo",
-      end: "Anuradhapura",
-      seatCount: "1000",
-      startTime: "12.00",
-      endTime: "15.00",
-      isActive: true,
-    },
-  ]);
+  const [schedules, setSchedules] = useState([]);
   const navigate = useNavigate();
 
-  //   useEffect(() => {
+  //Get all train schedules
+  useEffect(() => {
+    axios
+      .get(`${BASE}/api/train`)
+      .then((res) => {
+        setSchedules(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
-  //   }, []);
-
-  //Update Train Schedule
-  const updateSchedule = () => {
-    console.log("Update Schedule");
-
-    //Navigate to update schedule page with the schedule id
-    navigate("/updateSchedule");
+  //Update Train Schedule with id
+  const updateSchedule = (id) => {
+    localStorage.setItem("selectedScheduleId", id);
+    navigate("/updateschedule");
   };
+
+  //Format the time
+  function formatTime(timeString) {
+    const date = new Date(timeString);
+    const hours = date.getUTCHours();
+    const minutes = date.getUTCMinutes();
+    const ampm = hours >= 12 ? "PM" : "AM";
+    const formattedHours = hours % 12 || 12; // Handle midnight (0) as 12 AM
+    const formattedMinutes = minutes.toString().padStart(2, "0"); // Ensure two-digit minutes
+
+    return `${formattedHours}:${formattedMinutes} ${ampm}`;
+  }
 
   return (
     <div className="all-schedules-container">
@@ -61,14 +50,17 @@ export default function All_Train_Schedules() {
         {schedules.map((schedule) => (
           <div className="schedule-card" key={schedule.id}>
             <div className="schedule-details">
-              <h3 className="schedule-name">{schedule.name}</h3>
+              <h3 className="schedule-name">{schedule.trainName}</h3>
               <div className="row">
                 <div className="col-md-6">
                   <p className="schedule-location">
                     <span className="icon">
                       <BiCurrentLocation />
                     </span>
-                    <strong>Start :</strong> {schedule.start}
+                    <strong>Start :</strong>{" "}
+                    {schedule.stations && schedule.stations.length > 0
+                      ? schedule.stations[0].stationName
+                      : "N/A"}
                   </p>
                 </div>
 
@@ -77,7 +69,11 @@ export default function All_Train_Schedules() {
                     <span className="icon">
                       <TbLocationFilled />
                     </span>
-                    <strong>End :</strong> {schedule.end}
+                    <strong>End :</strong>{" "}
+                    {schedule.stations && schedule.stations.length > 0
+                      ? schedule.stations[schedule.stations.length - 1]
+                          .stationName
+                      : "N/A"}
                   </p>
                 </div>
               </div>
@@ -88,7 +84,10 @@ export default function All_Train_Schedules() {
                     <span className="icon">
                       <IoIosTime />
                     </span>
-                    <strong>Departure Time:</strong> {schedule.startTime}
+                    <strong>Departure Time:</strong>{" "}
+                    {schedule.stations && schedule.stations.length > 0
+                      ? formatTime(schedule.stations[0].time)
+                      : "N/A"}
                   </p>
                 </div>
                 <div className="col-md-6">
@@ -96,7 +95,12 @@ export default function All_Train_Schedules() {
                     <span className="icon">
                       <RiMapPinTimeFill />
                     </span>
-                    <strong>Arrival Time:</strong> {schedule.endTime}
+                    <strong>Arrival Time:</strong>{" "}
+                    {schedule.stations && schedule.stations.length > 0
+                      ? formatTime(
+                          schedule.stations[schedule.stations.length - 1].time
+                        )
+                      : "N/A"}
                   </p>
                 </div>
               </div>
@@ -109,7 +113,10 @@ export default function All_Train_Schedules() {
             </div>
             <div className="row">
               <div className="col">
-                <button className="update-btn" onClick={updateSchedule}>
+                <button
+                  className="update-btn"
+                  onClick={() => updateSchedule(schedule.id)}
+                >
                   Update
                 </button>
               </div>

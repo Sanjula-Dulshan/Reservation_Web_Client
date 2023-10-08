@@ -5,7 +5,10 @@ import axios from "axios";
 import { BASE } from "../constants";
 
 export default function TrainSchedule() {
-  const [stations, setStations] = useState([{ stationName: "", time: "" }]);
+  const [stations, setStations] = useState([
+    { stationName: "", time: "" },
+    { stationName: "", time: "" },
+  ]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [trainName, setTrainName] = useState("");
   const [isActive, setIsActive] = useState(true);
@@ -86,15 +89,12 @@ export default function TrainSchedule() {
         // Display the modal
         openModal();
 
-        // After a delay, close the modal (you can adjust the delay)
         setTimeout(() => {
           closeModal();
         }, 3000);
       }
-
-      console.log("Data saved successfully:", response.data);
     } catch (error) {
-      console.error("Error:", error);
+      console.log(error);
     }
   };
 
@@ -188,7 +188,7 @@ export default function TrainSchedule() {
                         }}
                       />
                     </div>
-                    {index > 0 && (
+                    {index > 1 && (
                       <div className="col-md-2 mb-3">
                         <button
                           type="button"
