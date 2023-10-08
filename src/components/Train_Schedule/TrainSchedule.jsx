@@ -86,15 +86,12 @@ export default function TrainSchedule() {
         // Display the modal
         openModal();
 
-        // After a delay, close the modal (you can adjust the delay)
         setTimeout(() => {
           closeModal();
         }, 3000);
       }
-
-      console.log("Data saved successfully:", response.data);
     } catch (error) {
-      console.error("Error:", error);
+      console.log(error);
     }
   };
 
