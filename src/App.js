@@ -8,6 +8,7 @@ import AvailableTrains from "./components/Train_Availability/AvailableTrains";
 import Header from "./components/Header/Header";
 import Confirmation from "./components/Confirmation/Confirmation";
 import Register from "./components/Register/Register";
+import AllReservations from "./components/AllReservations/AllReservations";
 import { ReactNotifications } from "react-notifications-component";
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
         <Route path="/availability" element={<AvailableTrains />} />
         <Route path="/confirmation" element={<Confirmation />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/reservations" element={<AllReservations />} />
       </Routes>
     </BrowserRouter>
   );

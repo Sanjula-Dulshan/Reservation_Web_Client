@@ -1,69 +1,83 @@
 import React, { useState, useEffect } from "react";
-import "./TravelerInquiry.css";
+import "./AllReservations.css";
 import { FaIdCard, FaEnvelope } from "react-icons/fa";
 import axios from "axios";
 import { BASE } from "../constants";
 import Modal from "react-modal";
 
 const AllReservations = () => {
-  const [users, setUsers] = useState([]);
+  const [reservations, setReservations] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
-  axios
-    .put(`${BASE}/api/user/${updateData.nic}`, updatedUserData)
-    .then((response) => {
-      console.log("User updated:", response.data);
-    })
-    .catch((error) => {
-      console.error("Error updating user:", error);
-    });
-};
+  useEffect(() => {
+    axios
+      .get(`${BASE}/api/reservation`)
+      .then((response) => {
+        const filteredReservation = response.data.filter(
+          (reservation) => reservation.isAgent
+        );
 
-useEffect(() => {
-  axios
-    .get(`${BASE}/api/user`)
-    .then((response) => {
-      const filteredUsers = response.data.filter(
-        (user) => user.isTraveler && user.isAgent
-      );
+        setReservations(filteredReservation);
 
-      setUsers(filteredUsers);
-      console.log("Filtered Users:", filteredUsers);
-    })
-    .catch((error) => {
-      console.error("Error fetching users:", error);
-    });
-}, []);
+        console.log("Filtered Reservation:", response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching users:", error);
+      });
+  }, []);
 
-return (
-  <div className="traveler-inquiries">
-    <h1 className="inquiries-title">Traveler Profiles</h1>
-    <div className="inquiry-cards">
-      {users.map((user, index) => (
-        <div className="inquiry-card" key={index}>
-          <div className="inquiry-details">
-            <h3 className="inquiry-name">{user.name}</h3>
-            <p className="inquiry-date">
-              <span className="icon">
-                <FaIdCard />
-              </span>
-              <strong>Nic:</strong> {user.nic}
-            </p>
+  // Function to handle search input change
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
 
-            <p className="inquiry-telephone">
-              <span className="icon">
-                <FaEnvelope />
-              </span>
-              <strong>Email:</strong> {user.email}
-            </p>
+  // Function to filter reservations based on the search term
+  const filteredReservations = reservations.filter((reservation) =>
+    reservation.userId.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  return (
+    <div className="traveler-inquiries">
+      <h1 className="inquiries-title">All Reservations</h1>
+      {/* Search bar */}
+      <div className="search-bar">
+        <input
+          type="text"
+          placeholder="Search by NIC"
+          value={searchTerm}
+          onChange={handleSearchChange}
+        />
+      </div>
+      <div className="inquiry-cards">
+        {filteredReservations.map((reservation, index) => (
+          <div className="inquiry-card" key={index}>
+            <div className="inquiry-details">
+              <h3 className="inquiry-name">{reservation.userId}</h3>
+              <p className="inquiry-date">
+                <strong>From Station : </strong> {reservation.fromStation}
+              </p>
+
+              <p className="inquiry-telephone">
+                <strong>To Station :</strong> {reservation.toStation}
+              </p>
+              <p className="inquiry-telephone">
+                <strong>Date</strong>{" "}
+                {new Date(reservation.date).toLocaleDateString()}
+              </p>
+
+              <p className="inquiry-telephone">
+                <strong>Total Price : </strong> Rs.{reservation.totalPrice}
+              </p>
+            </div>
+            <div className="button-container">
+              <button className="update-button">Update</button>
+              <button className="delete-button">Delete</button>
+            </div>
           </div>
-          <div className="button-container">
-            <button className="update-button">Update</button>
-            <button className="delete-button">Delete</button>
-          </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default AllReservations;

@@ -113,3 +113,27 @@
   align-items: center;
   z-index: 1000; /* Ensure the modal is on top */
 }
+
+/* Add this CSS to your existing styles or create a new CSS file */
+.search-bar {
+  margin-bottom: 20px; /* Adjust margin as needed */
+}
+
+.search-bar input {
+  width: 80%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+/* Optional styles for search bar placeholder text */
+.search-bar input::placeholder {
+  color: #999;
+}
+
+/* Optional styles for search bar input on focus */
+.search-bar input:focus {
+  outline: none;
+  border-color: #007bff; /* Change to your preferred focus color */
+}
