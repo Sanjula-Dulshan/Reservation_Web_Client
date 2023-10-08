@@ -31,6 +31,13 @@ export default function Home() {
             Manage Travelers
           </Link>
         </section>
+        <section className="traveler-section">
+          <h2>Traveler Assistance</h2>
+          <p>Create Traveler Account</p>
+          <Link to="/register" className="btn btn-primary">
+            Create Travelers
+          </Link>
+        </section>
         <section className="booking-section">
           <h2>Booking Management</h2>
           <p>Manage your travelers' bookings efficiently.</p>
