@@ -126,7 +126,6 @@ export default function TrainSchedule() {
         seatCount: schedules.seatCount,
         stations: formattedStations,
       };
-      console.log(updatedSchedulesData);
       const scheduleId = localStorage.getItem("selectedScheduleId");
       const apiUrl = `${BASE}/api/train/${scheduleId}`;
 

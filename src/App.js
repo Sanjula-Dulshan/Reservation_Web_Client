@@ -15,6 +15,7 @@ import { ReactNotifications } from "react-notifications-component";
 import Schedule from "./components/Train_Schedule/TrainSchedule";
 import UpdateSchedule from "./components/Train_Schedule/TrainScheduleUpdate";
 import AllSchedules from "./components/All_Train_Schedules/AllTrainSchedules";
+import BackOffice from "./components/BackOffice/BackOffice";
 
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/reservations" element={<AllReservations />} />
 
+        <Route path="/backoffice" exact element={<BackOffice />} />
         <Route path="/schedule" exact element={<Schedule />} />
         <Route path="/updateschedule" exact element={<UpdateSchedule />} />
         <Route path="/allschedules" exact element={<AllSchedules />} />

@@ -8,7 +8,6 @@ import { MdAirlineSeatReclineExtra } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { BASE } from "../constants";
-import "./AllTrainSchedules.css";
 import Modal from "react-modal";
 
 export default function All_Train_Schedules() {
