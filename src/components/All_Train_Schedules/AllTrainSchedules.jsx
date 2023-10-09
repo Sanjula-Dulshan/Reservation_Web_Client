@@ -8,6 +8,7 @@ import { MdAirlineSeatReclineExtra } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { BASE } from "../constants";
+import "./AllTrainSchedules.css";
 
 export default function All_Train_Schedules() {
   const [schedules, setSchedules] = useState([]);
@@ -31,6 +32,19 @@ export default function All_Train_Schedules() {
     navigate("/updateschedule");
   };
 
+  //update Status
+  const updateStatus = (id) => {
+    axios
+      .patch(`${BASE}/api/train/updateStatus/${id}`)
+      .then((res) => {
+        console.log(res);
+        window.location.reload();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   //Format the time
   function formatTime(timeString) {
     const date = new Date(timeString);
@@ -46,6 +60,14 @@ export default function All_Train_Schedules() {
   return (
     <div className="all-schedules-container">
       <h1 className="schedules-title">All Train Schedules</h1>
+      <div className="title-and-button-container">
+        <button
+          className="btn btn-primary btn-sm add-schedule-button"
+          onClick={() => navigate("/schedule")}
+        >
+          Add New Schedule
+        </button>
+      </div>
       <div className="schedule-cards">
         {schedules.map((schedule) => (
           <div className="schedule-card" key={schedule.id}>
@@ -125,6 +147,9 @@ export default function All_Train_Schedules() {
                   className={`btn ${
                     schedule.isActive ? "btn-resolved" : "btn-pending"
                   }`}
+                  onClick={() => {
+                    updateStatus(schedule.id);
+                  }}
                 >
                   {schedule.isActive ? "Active" : "Inactive"}
                 </button>

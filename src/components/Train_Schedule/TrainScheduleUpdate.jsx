@@ -19,10 +19,6 @@ export default function TrainSchedule() {
     Array.from({ length: stationRows.length }, () => "")
   );
 
-  const [formattedTimeValues, setFormattedTimeValues] = useState(
-    Array.from({ length: stationRows.length }, () => "")
-  );
-
   const addRow = () => {
     setStationRows([...stationRows, { stationName: "", arrivalTime: "" }]);
   };
@@ -128,7 +124,6 @@ export default function TrainSchedule() {
         trainName: schedules.trainName,
         isActive: schedules.isActive,
         seatCount: schedules.seatCount,
-        feePerStation: 1200,
         stations: formattedStations,
       };
       console.log(updatedSchedulesData);
@@ -203,6 +198,7 @@ export default function TrainSchedule() {
                     id="isActive"
                     name="isActive"
                     value={schedules.isActive}
+                    disabled
                     onChange={(e) =>
                       setSchedules({
                         ...schedules,
