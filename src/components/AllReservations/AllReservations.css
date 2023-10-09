@@ -114,61 +114,26 @@
   z-index: 1000; /* Ensure the modal is on top */
 }
 
-/* Modal Styles */
-.modal-dialog {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: white;
-  width: 400px;
-  padding: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  z-index: 1000;
+/* Add this CSS to your existing styles or create a new CSS file */
+.search-bar {
+  margin-bottom: 20px; /* Adjust margin as needed */
 }
 
-.modal-header {
-  padding: 10px 0;
-  text-align: center;
-  font-weight: bold;
-  font-size: 20px;
+.search-bar input {
+  width: 80%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
 }
 
-.modal-content {
-  padding: 20px;
+/* Optional styles for search bar placeholder text */
+.search-bar input::placeholder {
+  color: #999;
 }
 
-.modal-body {
-  margin-bottom: 20px;
-}
-
-.modal-footer {
-  text-align: right;
-}
-
-/* Button Styles */
-.btn {
-  padding: 10px 20px;
-  margin-right: 10px;
-  cursor: pointer;
-}
-
-.btn-primary {
-  background-color: #00aeff;
-  color: #fff;
-  border: none;
-}
-
-.btn-primary:hover {
-  background-color: #0056b3;
-}
-
-.btn-danger {
-  background-color: #dc3545;
-  color: #fff;
-  border: none;
-}
-
-.btn-danger:hover {
-  background-color: #c82333;
+/* Optional styles for search bar input on focus */
+.search-bar input:focus {
+  outline: none;
+  border-color: #007bff; /* Change to your preferred focus color */
 }

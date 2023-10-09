@@ -1,80 +1,135 @@
 import React, { useState, useEffect } from "react";
 import "./TravelerInquiry.css";
-import { FaCalendarAlt, FaPhone, FaInfoCircle } from "react-icons/fa"; // Import icons
+import { FaIdCard, FaEnvelope } from "react-icons/fa";
+import axios from "axios";
+import { BASE } from "../constants";
+import Modal from "react-modal";
 
 const TravelerInquiries = () => {
-  const [inquiries, setInquiries] = useState([
-    {
-      id: 1,
-      name: "John Doe",
-      date: "2023-10-15",
-      description: "I have a question about my upcoming trip.",
-      telephone: "+1234567890",
-      pending: true,
-    },
-    {
-      id: 2,
-      name: "Jane Smith",
-      date: "2023-10-14",
-      description: "Can you help me with my reservation?",
-      telephone: "+9876543210",
-      pending: false,
-    },
-    {
-      id: 3,
-      name: "Alice Johnson",
-      date: "2023-10-13",
-      description: "I need assistance with my booking.",
-      telephone: "+1112223333",
-      pending: true,
-    },
-    // Add more dummy inquiries as needed
-  ]);
+  const [users, setUsers] = useState([]);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const [updateData, setUpdateData] = useState({
+    name: "",
+    email: "",
+  });
+
+  const openUpdateModal = (data) => {
+    setIsUpdateModalOpen(true);
+    setUpdateData(data); // Set the data to update
+  };
+
+  const closeUpdateModal = () => {
+    setIsUpdateModalOpen(false);
+  };
+
+  const handleSave = () => {
+    const updatedUserData = {
+      name: updateData.name,
+      email: updateData.email,
+    };
+
+    axios
+      .put(`${BASE}/api/user/${updateData.nic}`, updatedUserData)
+      .then((response) => {
+        console.log("User updated:", response.data);
+      })
+      .catch((error) => {
+        console.error("Error updating user:", error);
+      });
+  };
 
   useEffect(() => {
-    // In a real application, you would fetch traveler inquiries from an API or database here
-    // For this example, we initialize 'inquiries' with dummy data
+    axios
+      .get(`${BASE}/api/user`)
+      .then((response) => {
+        const filteredUsers = response.data.filter(
+          (user) => user.isTraveler && user.isAgent
+        );
+
+        setUsers(filteredUsers);
+        console.log("Filtered Users:", filteredUsers);
+      })
+      .catch((error) => {
+        console.error("Error fetching users:", error);
+      });
   }, []);
 
   return (
     <div className="traveler-inquiries">
-      <h1 className="inquiries-title">Traveler Inquiries</h1>
+      <h1 className="inquiries-title">Traveler Profiles</h1>
       <div className="inquiry-cards">
-        {inquiries.map((inquiry) => (
-          <div className="inquiry-card" key={inquiry.id}>
+        {users.map((user, index) => (
+          <div className="inquiry-card" key={index}>
             <div className="inquiry-details">
-              <h3 className="inquiry-name">{inquiry.name}</h3>
+              <h3 className="inquiry-name">{user.name}</h3>
               <p className="inquiry-date">
                 <span className="icon">
-                  <FaCalendarAlt />
+                  <FaIdCard />
                 </span>
-                <strong>Date of Inquiry:</strong> {inquiry.date}
+                <strong>Nic:</strong> {user.nic}
               </p>
 
               <p className="inquiry-telephone">
                 <span className="icon">
-                  <FaPhone />
+                  <FaEnvelope />
                 </span>
-                <strong>Telephone:</strong> {inquiry.telephone}
-              </p>
-              <p className="inquiry-description">
-                <span className="icon">
-                  <FaInfoCircle />
-                </span>
-                <strong>Inquiry Description:</strong> {inquiry.description}
+                <strong>Email:</strong> {user.email}
               </p>
             </div>
-            <div className="inquiry-actions">
+            <div className="button-container">
               <button
-                className={`btn ${
-                  inquiry.pending ? "btn-pending" : "btn-resolved"
-                }`}
+                className="update-button"
+                onClick={() => openUpdateModal(user)}
               >
-                {inquiry.pending ? "Pending" : "Resolved"}
+                Update
               </button>
+              <button className="delete-button">Delete</button>
             </div>
           </div>
         ))}
+        <Modal isOpen={isUpdateModalOpen} onRequestClose={closeUpdateModal}>
+          <h2>Update User</h2>
+          <form>
+            <div className="form-group">
+              <label htmlFor="name">Name</label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                value={updateData.name}
+                onChange={(e) =>
+                  setUpdateData({ ...updateData, name: e.target.value })
+                }
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="email">Email</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={updateData.email}
+                onChange={(e) =>
+                  setUpdateData({ ...updateData, email: e.target.value })
+                }
+              />
+            </div>
+            {/* Add other form fields */}
+            <div className="button-container">
+              <button
+                type="submit"
+                className="btn btn-primary"
+                onClick={handleSave}
+              >
+                Save
+              </button>
+
+              <button className="btn btn-danger" onClick={closeUpdateModal}>
+                Cancel
+              </button>
+            </div>
+          </form>
+        </Modal>
       </div>
     </div>
   );
