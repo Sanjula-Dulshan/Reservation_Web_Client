@@ -91,6 +91,22 @@
   cursor: pointer; /* Add pointer cursor on hover */
 }
 
+.status-button {
+  background-color: #ff0000; /* Blue background color */
+  color: #fff; /* White text color */
+  border: none; /* Remove button border */
+  padding: 5px 10px; /* Add padding to the button */
+  cursor: pointer; /* Add pointer cursor on hover */
+}
+
+.status-button-two {
+  background-color: #15ff00; /* Blue background color */
+  color: #fff; /* White text color */
+  border: none; /* Remove button border */
+  padding: 5px 10px; /* Add padding to the button */
+  cursor: pointer; /* Add pointer cursor on hover */
+}
+
 /* Style for the Delete button */
 .delete-button {
   background-color: #dc3545; /* Red background color */

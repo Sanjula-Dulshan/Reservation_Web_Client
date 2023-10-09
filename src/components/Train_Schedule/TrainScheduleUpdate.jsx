@@ -141,6 +141,10 @@ export default function TrainSchedule() {
     }
   };
 
+  const cancel = () => {
+    navigate("/allschedules");
+  };
+
   return (
     <div className="container">
       <div className="row justify-content-center">
@@ -271,7 +275,13 @@ export default function TrainSchedule() {
                     Update Schedule
                   </button>
                 </div>
+                <br></br>
               </form>
+              <div className="text-center mt-2">
+                <button className="btn btn-secondary" onClick={() => cancel()}>
+                  Cancel
+                </button>
+              </div>
             </div>
           </div>
         </div>

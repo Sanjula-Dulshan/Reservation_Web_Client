@@ -6,8 +6,8 @@ export default function BackOffice() {
     <div className="homepage">
       <section className="hero">
         <div className="hero-content">
-          <h1>Welcome to Railway Seat Reservation</h1>
-          <p>Your journey begins here</p>
+          <h1>Welcome to Railway Schedule Management</h1>
+          <p>Manage Schedules and Travelers</p>
         </div>
       </section>
       <main>
