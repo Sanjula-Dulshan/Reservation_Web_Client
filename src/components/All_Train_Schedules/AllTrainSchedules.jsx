@@ -9,10 +9,13 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { BASE } from "../constants";
 import "./AllTrainSchedules.css";
+import Modal from "react-modal";
 
 export default function All_Train_Schedules() {
   const [schedules, setSchedules] = useState([]);
   const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [response, setresponse] = useState("");
 
   //Get all train schedules
   useEffect(() => {
@@ -26,6 +29,14 @@ export default function All_Train_Schedules() {
       });
   }, []);
 
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   //Update Train Schedule with id
   const updateSchedule = (id) => {
     localStorage.setItem("selectedScheduleId", id);
@@ -37,7 +48,14 @@ export default function All_Train_Schedules() {
     axios
       .patch(`${BASE}/api/train/updateStatus/${id}`)
       .then((res) => {
-        console.log(res);
+        // Display the modal
+        setresponse(res.data);
+
+        openModal();
+
+        setTimeout(() => {
+          closeModal();
+        }, 3000);
         window.location.reload();
       })
       .catch((err) => {
@@ -157,6 +175,17 @@ export default function All_Train_Schedules() {
             </div>
           </div>
         ))}
+        {/* Modal for success */}
+        <Modal
+          isOpen={isModalOpen}
+          onRequestClose={closeModal}
+          className="success-modal"
+        >
+          <div className="modal-content">
+            <h2>{response}</h2>
+            <p></p>
+          </div>
+        </Modal>
       </div>
     </div>
   );
