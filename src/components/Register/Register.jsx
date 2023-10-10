@@ -14,7 +14,7 @@ const Registration = () => {
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => {
     setIsModalOpen(false);
-    navigate("/");
+    navigate("/home");
   };
   const [formData, setFormData] = useState({
     // Initialize your form fields here

@@ -11,10 +11,11 @@ Modal.setAppElement("#root");
 const Registration = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
+
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => {
     setIsModalOpen(false);
-    navigate("/");
+    navigate("/home");
   };
   const [formData, setFormData] = useState({
     // Initialize your form fields here
@@ -43,10 +44,12 @@ const Registration = () => {
         localStorage.setItem("nic", formData.nic);
         localStorage.setItem("isAgent", response.data.isAgent);
         localStorage.setItem("isBackOffice", response.data.isBackOffice);
+        localStorage.setItem("isTraveler", response.data.isTraveler);
 
         console.log(localStorage.getItem("nic"));
         console.log(localStorage.getItem("isAgent"));
         console.log(localStorage.getItem("isBackOffice"));
+        console.log(localStorage.getItem("isTraveler"));
         openModal();
       } else {
         console.error("User Login failed:", response.data);
