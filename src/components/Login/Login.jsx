@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import "./Register.css";
-import signUp from "./register.jpg";
+import "./Login.css";
+import signUp from "./login.jpg";
 import axios from "axios";
 import { BASE } from "../constants";
 import Modal from "react-modal";
@@ -11,6 +11,7 @@ Modal.setAppElement("#root");
 const Registration = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
+
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => {
     setIsModalOpen(false);
@@ -18,8 +19,7 @@ const Registration = () => {
   };
   const [formData, setFormData] = useState({
     // Initialize your form fields here
-    name: "",
-    email: "",
+
     password: "",
     nic: "",
   });
@@ -30,22 +30,29 @@ const Registration = () => {
     try {
       // Prepare the data to be sent to the server
       const userData = {
-        name: formData.name,
-        email: formData.email,
         password: formData.password,
         nic: formData.nic,
-        isAgent: true,
       };
 
       // Make a POST request to the server
-      const response = await axios.post(`${BASE}/api/user`, userData);
+      const response = await axios.post(`${BASE}/api/user/login`, userData);
 
       // Check the response status
       if (response.status === 200) {
-        console.log("User registration successful:", response.data);
+        console.log("User Login successful:", response.data);
+        localStorage.setItem("email", formData.email);
+        localStorage.setItem("nic", formData.nic);
+        localStorage.setItem("isAgent", response.data.isAgent);
+        localStorage.setItem("isBackOffice", response.data.isBackOffice);
+        localStorage.setItem("isTraveler", response.data.isTraveler);
+
+        console.log(localStorage.getItem("nic"));
+        console.log(localStorage.getItem("isAgent"));
+        console.log(localStorage.getItem("isBackOffice"));
+        console.log(localStorage.getItem("isTraveler"));
         openModal();
       } else {
-        console.error("User registration failed:", response.data);
+        console.error("User Login failed:", response.data);
       }
     } catch (error) {
       // Handle any errors that occur during the request
@@ -69,7 +76,7 @@ const Registration = () => {
           <img src={signUp} alt="Register" />
         </div>
         <div className="registration-form">
-          <h2>Create an Account</h2>
+          <h2>Sign In</h2>
           <form onSubmit={handleSubmit}>
             <div className="form-group">
               <label htmlFor="nic">Nic</label>
@@ -78,29 +85,6 @@ const Registration = () => {
                 id="nic"
                 name="nic"
                 value={formData.nic}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="username">Username</label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                value={formData.name}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="email">Email</label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email}
                 onChange={handleInputChange}
                 required
               />
@@ -119,7 +103,7 @@ const Registration = () => {
             </div>
 
             <div className="form-group">
-              <button type="submit">Register</button>
+              <button type="submit">Login</button>
             </div>
           </form>
           {/* Modal */}

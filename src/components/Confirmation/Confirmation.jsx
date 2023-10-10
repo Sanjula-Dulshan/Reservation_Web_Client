@@ -49,7 +49,7 @@ const PassengerInfo = () => {
 
   const closeModal = () => {
     setIsModalOpen(false);
-    navigate("/");
+    navigate("/home");
   };
 
   const handleConfirmClick = () => {

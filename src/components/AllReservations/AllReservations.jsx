@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from "react";
 import "./AllReservations.css";
-import { FaIdCard, FaEnvelope } from "react-icons/fa";
+import UpdateModal from "./UpdateModal";
+
 import axios from "axios";
 import { BASE } from "../constants";
-import Modal from "react-modal";
 
 const AllReservations = () => {
   const [reservations, setReservations] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [isUpdateModalOpen, setUpdateModalOpen] = useState(false);
+  const [selectedReservation, setSelectedReservation] = useState(null);
 
   useEffect(() => {
     axios
@@ -19,7 +21,7 @@ const AllReservations = () => {
 
         setReservations(filteredReservation);
 
-        console.log("Filtered Reservation:", response.data);
+        console.log("Filtered Reservation:", filteredReservation);
       })
       .catch((error) => {
         console.error("Error fetching users:", error);
@@ -35,6 +37,49 @@ const AllReservations = () => {
   const filteredReservations = reservations.filter((reservation) =>
     reservation.userId.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const openUpdateModal = (reservation) => {
+    setSelectedReservation(reservation);
+
+    setUpdateModalOpen(true);
+  };
+
+  // Function to save the updated noOfSeats and close the update modal
+  const saveUpdatedNoOfSeats = (updatedNoOfSeats) => {
+    // Check if there is a selected reservation
+    if (selectedReservation) {
+      // Define the reservation ID
+      const reservationId = selectedReservation.id;
+      console.log("id", reservationId); // Replace with the actual property name of the ID in your reservation object
+
+      // Define the updated data with the new noOfSeats value
+      const updatedData = {
+        noOfSeats: updatedNoOfSeats,
+      };
+
+      // Make an API call to update the reservation's noOfSeats
+      axios
+        .put(`${BASE}/api/reservation/${reservationId}`, updatedData)
+        .then((response) => {
+          if (response.status === 200) {
+            // Reservation updated successfully
+            console.log("Reservation updated:", response.data);
+
+            // Close the modal
+            setUpdateModalOpen(false);
+
+            // Optionally, update the selected reservation's noOfSeats in your state
+            // ...
+          } else {
+            // Handle any errors or display an error message
+            console.error("Reservation update failed:", response.data);
+          }
+        })
+        .catch((error) => {
+          console.error("Error updating reservation:", error);
+        });
+    }
+  };
 
   return (
     <div className="traveler-inquiries">
@@ -61,6 +106,9 @@ const AllReservations = () => {
                 <strong>To Station :</strong> {reservation.toStation}
               </p>
               <p className="inquiry-telephone">
+                <strong>No of Seats :</strong> {reservation.noOfSeats}
+              </p>
+              <p className="inquiry-telephone">
                 <strong>Date</strong>{" "}
                 {new Date(reservation.date).toLocaleDateString()}
               </p>
@@ -70,12 +118,44 @@ const AllReservations = () => {
               </p>
             </div>
             <div className="button-container">
-              <button className="update-button">Update</button>
+              <button
+                className="update-button"
+                onClick={() => openUpdateModal(reservation)}
+              >
+                Update
+              </button>
               <button className="delete-button">Delete</button>
             </div>
           </div>
         ))}
       </div>
+      {/* Update Modal */}
+      {/* <Modal
+        isOpen={isUpdateModalOpen}
+        onRequestClose={() => setUpdateModalOpen(false)}
+        className="modal-dialog"
+      >
+        <h2>Update No. of Seats</h2>
+        <p>
+          <strong>Current No. of Seats:</strong> {updatedNoOfSeats}
+        </p>
+        <label>New No. of Seats:</label>
+        <input
+          type="number"
+          value={updatedNoOfSeats}
+          onChange={(e) => setUpdatedNoOfSeats(e.target.value)}
+        />
+        <button onClick={saveUpdatedNoOfSeats}>Save</button>
+      </Modal> */}
+
+      <UpdateModal
+        isOpen={isUpdateModalOpen}
+        onRequestClose={() => setUpdateModalOpen(false)}
+        initialNoOfSeats={
+          selectedReservation ? selectedReservation.noOfSeats : 0
+        }
+        onSave={saveUpdatedNoOfSeats}
+      />
     </div>
   );
 };

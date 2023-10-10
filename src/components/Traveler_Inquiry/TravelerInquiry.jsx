@@ -18,6 +18,7 @@ const TravelerInquiries = () => {
   const openUpdateModal = (data) => {
     setIsUpdateModalOpen(true);
     setUpdateData(data); // Set the data to update
+    console.log("19 Update Data:", data);
   };
 
   const closeUpdateModal = () => {
@@ -30,14 +31,16 @@ const TravelerInquiries = () => {
       email: updateData.email,
     };
 
-    axios
-      .put(`${BASE}/api/user/${updateData.nic}`, updatedUserData)
-      .then((response) => {
-        console.log("User updated:", response.data);
-      })
-      .catch((error) => {
-        console.error("Error updating user:", error);
-      });
+    console.log("Updated User Data:", updatedUserData);
+
+    // axios
+    //   .put(`${BASE}/api/user/${updateData.nic}`, updatedUserData)
+    //   .then((response) => {
+    //     console.log("User updated:", response.data);
+    //   })
+    //   .catch((error) => {
+    //     console.error("Error updating user:", error);
+    //   });
   };
 
   useEffect(() => {
@@ -130,7 +133,11 @@ const TravelerInquiries = () => {
             </div>
           </div>
         ))}
-        <Modal isOpen={isUpdateModalOpen} onRequestClose={closeUpdateModal}>
+        <Modal
+          isOpen={isUpdateModalOpen}
+          onRequestClose={closeUpdateModal}
+          className="modal-profile"
+        >
           <h2>Update User</h2>
           <form>
             <div className="form-group">
@@ -162,7 +169,7 @@ const TravelerInquiries = () => {
               <button
                 type="submit"
                 className="btn btn-primary"
-                onClick={handleSave}
+                onClick={() => handleSave()}
               >
                 Save
               </button>

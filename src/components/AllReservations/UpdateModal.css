@@ -1,0 +1,89 @@
+/* UpdateModal.css */
+
+/* Modal Overlay Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Ensure the modal is on top */
+}
+
+/* Modal Styles */
+.modal-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  width: 400px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+.modal-header {
+  padding: 10px 0;
+  text-align: center;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.modal-content {
+  padding: 20px;
+}
+
+.modal-body {
+  margin-bottom: 20px;
+}
+
+.modal-footer {
+  text-align: right;
+}
+
+/* Button Styles */
+.btn {
+  padding: 10px 20px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background-color: #00aeff;
+  color: #fff;
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  color: #fff;
+  border: none;
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+}
+
+/* Input Field Styles */
+input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+/* Label Styles */
+label {
+  font-weight: bold;
+}
