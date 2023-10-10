@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Login.css";
 import signUp from "./login.jpg";
 import axios from "axios";
@@ -42,17 +42,18 @@ const Registration = () => {
         console.log("User Login successful:", response.data);
         localStorage.setItem("email", formData.email);
         localStorage.setItem("nic", formData.nic);
-        localStorage.setItem("isAgent", response.data.isAgent);
+        localStorage.setItem("isAgent_current", response.data.isAgent);
         localStorage.setItem(
-          "isBackOffice_Current",
+          "isBackOffice_current",
           response.data.isBackOffice
         );
-        localStorage.setItem("isTraveler", response.data.isTraveler);
-
+        localStorage.setItem("isTraveler_current", response.data.isTraveler);
+        localStorage.setItem("firstlogin", true);
         console.log(localStorage.getItem("nic"));
-        console.log(localStorage.getItem("isAgent"));
-        console.log(localStorage.getItem("isBackOffice"));
-        console.log(localStorage.getItem("isTraveler"));
+        console.log(localStorage.getItem("isAgent_current"));
+        console.log(localStorage.getItem("isBackOffice_current"));
+        console.log(localStorage.getItem("isTraveler_current"));
+        window.location.reload();
         openModal();
       } else {
         console.error("User Login failed:", response.data);
@@ -71,6 +72,12 @@ const Registration = () => {
       [name]: value,
     });
   };
+
+  useEffect(() => {
+    if (localStorage.getItem("firstlogin")) {
+      navigate("/home");
+    }
+  }, []);
 
   return (
     <div className="registration-container">
