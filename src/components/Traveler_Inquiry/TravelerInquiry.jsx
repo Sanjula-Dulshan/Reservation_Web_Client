@@ -12,6 +12,8 @@ const TravelerInquiries = () => {
     name: "",
     email: "",
   });
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [response, setresponse] = useState("");
 
   const openUpdateModal = (data) => {
     setIsUpdateModalOpen(true);
@@ -57,6 +59,34 @@ const TravelerInquiries = () => {
       });
   }, []);
 
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  //update Status
+  const updateStatus = (id) => {
+    axios
+      .patch(`${BASE}/api/user/active_deactive/${id}`)
+      .then((res) => {
+        // Display the modal
+        setresponse(res.data);
+
+        openModal();
+
+        setTimeout(() => {
+          closeModal();
+        }, 3000);
+        window.location.reload();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <div className="traveler-inquiries">
       <h1 className="inquiries-title">Traveler Profiles</h1>
@@ -87,6 +117,19 @@ const TravelerInquiries = () => {
                 Update
               </button>
               <button className="delete-button">Delete</button>
+
+              {/* Display Button Only for backOffice */}
+              <button
+                className={`${
+                  user.isActive ? "status-button-two" : "status-button"
+                }`}
+                onClick={() => {
+                  updateStatus(user.nic);
+                }}
+              >
+                {user.isActive ? "Active" : "Inactive"}
+              </button>
+              {/* **** */}
             </div>
           </div>
         ))}
@@ -136,6 +179,17 @@ const TravelerInquiries = () => {
               </button>
             </div>
           </form>
+        </Modal>
+        {/* Modal for success */}
+        <Modal
+          isOpen={isModalOpen}
+          onRequestClose={closeModal}
+          className="success-modal"
+        >
+          <div className="modal-content">
+            <h2>{response}</h2>
+            <p></p>
+          </div>
         </Modal>
       </div>
     </div>

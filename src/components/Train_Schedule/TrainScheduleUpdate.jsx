@@ -19,10 +19,6 @@ export default function TrainSchedule() {
     Array.from({ length: stationRows.length }, () => "")
   );
 
-  const [formattedTimeValues, setFormattedTimeValues] = useState(
-    Array.from({ length: stationRows.length }, () => "")
-  );
-
   const addRow = () => {
     setStationRows([...stationRows, { stationName: "", arrivalTime: "" }]);
   };
@@ -128,10 +124,8 @@ export default function TrainSchedule() {
         trainName: schedules.trainName,
         isActive: schedules.isActive,
         seatCount: schedules.seatCount,
-        feePerStation: 1200,
         stations: formattedStations,
       };
-      console.log(updatedSchedulesData);
       const scheduleId = localStorage.getItem("selectedScheduleId");
       const apiUrl = `${BASE}/api/train/${scheduleId}`;
 
@@ -145,6 +139,10 @@ export default function TrainSchedule() {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const cancel = () => {
+    navigate("/allschedules");
   };
 
   return (
@@ -203,6 +201,7 @@ export default function TrainSchedule() {
                     id="isActive"
                     name="isActive"
                     value={schedules.isActive}
+                    disabled
                     onChange={(e) =>
                       setSchedules({
                         ...schedules,
@@ -276,7 +275,13 @@ export default function TrainSchedule() {
                     Update Schedule
                   </button>
                 </div>
+                <br></br>
               </form>
+              <div className="text-center mt-2">
+                <button className="btn btn-secondary" onClick={() => cancel()}>
+                  Cancel
+                </button>
+              </div>
             </div>
           </div>
         </div>

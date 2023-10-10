@@ -85,3 +85,16 @@
     width: 100%;
   }
   
+  .title-and-button-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px; 
+    margin-top: 3%;
+    margin-left: 8%;
+  }
+
+  .add-schedule-button {
+    width: 200px; 
+    margin-right: auto;
+  }
