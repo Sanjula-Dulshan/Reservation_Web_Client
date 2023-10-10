@@ -14,8 +14,7 @@ const TravelerInquiries = () => {
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [response, setresponse] = useState("");
-  const backoffice = localStorage.getItem("isBackOffice_Current");
-  console.log("Value " + backoffice);
+  const backoffice = localStorage.getItem("isBackOffice_current");
 
   const openUpdateModal = (data) => {
     setIsUpdateModalOpen(true);
