@@ -7,7 +7,7 @@ import TravelerInquiries from "./components/Traveler_Inquiry/TravelerInquiry";
 import AvailableTrains from "./components/Train_Availability/AvailableTrains";
 import Header from "./components/Header/Header";
 import Confirmation from "./components/Confirmation/Confirmation";
-
+import Login from "./components/Login/Login";
 import Register from "./components/Register/Register";
 import AllReservations from "./components/AllReservations/AllReservations";
 import { ReactNotifications } from "react-notifications-component";
@@ -16,14 +16,15 @@ import Schedule from "./components/Train_Schedule/TrainSchedule";
 import UpdateSchedule from "./components/Train_Schedule/TrainScheduleUpdate";
 import AllSchedules from "./components/All_Train_Schedules/AllTrainSchedules";
 
-
 function App() {
   return (
     <BrowserRouter>
       <Header />
+
       <ReactNotifications />
       <Routes>
         <Route path="/" exact element={<Home />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/travelers" element={<TravelerInquiries />} />
         <Route path="/availability" element={<AvailableTrains />} />
         <Route path="/confirmation" element={<Confirmation />} />
@@ -34,7 +35,6 @@ function App() {
         <Route path="/schedule" exact element={<Schedule />} />
         <Route path="/updateschedule" exact element={<UpdateSchedule />} />
         <Route path="/allschedules" exact element={<AllSchedules />} />
-
       </Routes>
     </BrowserRouter>
   );
