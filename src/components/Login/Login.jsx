@@ -43,7 +43,10 @@ const Registration = () => {
         localStorage.setItem("email", formData.email);
         localStorage.setItem("nic", formData.nic);
         localStorage.setItem("isAgent", response.data.isAgent);
-        localStorage.setItem("isBackOffice", response.data.isBackOffice);
+        localStorage.setItem(
+          "isBackOffice_Current",
+          response.data.isBackOffice
+        );
         localStorage.setItem("isTraveler", response.data.isTraveler);
 
         console.log(localStorage.getItem("nic"));
