@@ -73,18 +73,27 @@ const AllReservations = () => {
         return;
       }
 
+      // Convert the ISO 8601 date string to a Date object
+      const reservationDate = new Date("2023-10-11T18:30:00.000+00:00");
+
+      // Calculate the current date
+      const currentDate = new Date();
+
       // Calculate the date 5 days before the reservation date
-      const fiveDaysBeforeReservation = new Date(selectedReservation.date);
-      fiveDaysBeforeReservation.setDate(
-        fiveDaysBeforeReservation.getDate() - 5
-      );
+      const fiveDaysBeforeReservation = new Date(reservationDate);
+      fiveDaysBeforeReservation.setDate(reservationDate.getDate() - 5);
+
+      console.log(fiveDaysBeforeReservation);
 
       // Check if the current date is at least 5 days before the reservation date
-      if (new Date() >= fiveDaysBeforeReservation) {
-        showErrorNotification(
-          "You are not allowed to update the number of seats within 5 days of the reservation date."
+      if (currentDate < fiveDaysBeforeReservation) {
+        // Allow the update since it's at least 5 days before the reservation date
+        console.log("You can update the reservation.");
+      } else {
+        // Display an error message
+        console.log(
+          "You are not allowed to update the reservation within 5 days of the reservation date."
         );
-        return;
       }
 
       // Prepare the updated data

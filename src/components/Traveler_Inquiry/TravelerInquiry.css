@@ -1,8 +1,8 @@
-.inquiries-title {
+.inquiries-title-profile {
   font-size: 28px;
   font-weight: bold;
   margin-bottom: 20px;
-  color: #000000;
+  color: #ffffff;
 }
 
 .inquiry-cards {
@@ -187,4 +187,64 @@
 
 .btn-danger:hover {
   background-color: #c82333;
+}
+
+/* deletion-confirmation-modal.css */
+.deletion-confirmation-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  border: 1px solid #ccc;
+  padding: 20px;
+  border-radius: 4px;
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+}
+
+.deletion-confirmation-modal h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.deletion-confirmation-modal p {
+  font-size: 16px;
+  margin: 10px 0;
+}
+
+.deletion-confirmation-modal .button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.deletion-confirmation-modal button {
+  margin: 0 10px;
+  padding: 10px 20px;
+  background-color: #d9534f;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.deletion-confirmation-modal button.btn-primary {
+  background-color: #5bc0de;
+}
+
+.deletion-confirmation-modal button.btn-danger:hover {
+  background-color: #c9302c;
+}
+
+.deletion-confirmation-modal button.btn-primary:hover {
+  background-color: #46b8da;
+}
+
+/* Media query to adjust modal size on small screens */
+@media (max-width: 600px) {
+  .deletion-confirmation-modal {
+    width: 90%;
+  }
 }
