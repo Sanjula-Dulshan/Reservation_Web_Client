@@ -4,6 +4,8 @@ import Modal from "react-modal";
 import trainGif from "./train2.gif";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import axios from "axios";
+import { BASE } from "../constants";
 
 Modal.setAppElement("#root");
 
@@ -23,13 +25,13 @@ const PassengerInfo = () => {
   const trainName = queryParams.get("trainName");
   const startTime = queryParams.get("startTime");
   const endTime = queryParams.get("endTime");
-  const noOfSeats = queryParams.get("noOfSeats");
+  const noOfSeats = queryParams.get("seats");
   const ticketPrice = queryParams.get("ticketPrice");
   const totalPrice = queryParams.get("totalPrice");
-  const nic = queryParams.get("nic");
-  const start = queryParams.get("start");
-  const end = queryParams.get("end");
-  const seats = queryParams.get("seats");
+  const userId = queryParams.get("nic");
+  const fromStation = queryParams.get("start");
+  const toStation = queryParams.get("end");
+  const date = queryParams.get("date");
 
   const formatTime = (timeString) => {
     const options = { hour: "numeric", minute: "numeric", hour12: true };
@@ -40,8 +42,8 @@ const PassengerInfo = () => {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
 
-  const formattedStart = capitalizeFirstLetter(start);
-  const formattedEnd = capitalizeFirstLetter(end);
+  const formattedStart = capitalizeFirstLetter(fromStation);
+  const formattedEnd = capitalizeFirstLetter(toStation);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -53,15 +55,40 @@ const PassengerInfo = () => {
   };
 
   const handleConfirmClick = () => {
-    // Handle booking confirmation logic here
+    const bookingData = {
+      userId: userId,
+      trainId: trainId,
+      fromStation: fromStation,
+      toStation: toStation,
+      noOfSeats: parseInt(noOfSeats),
+      totalPrice: parseInt(totalPrice),
+      date: date,
+      isAgent: true,
+    };
 
-    // Display the modal
-    openModal();
+    console.log("Booking Data:", bookingData);
+    axios
+      .post(`${BASE}/api/reservation`, bookingData)
+      .then((response) => {
+        if (response.status === 200) {
+          // Reservation created successfully
+          console.log("Reservation created:", response.data);
 
-    // After a delay, close the modal (you can adjust the delay)
-    setTimeout(() => {
-      closeModal();
-    }, 3000); // Close the modal after 3 seconds (adjust as needed)
+          // Display the modal
+          openModal();
+
+          // After a delay, close the modal (you can adjust the delay)
+          setTimeout(() => {
+            closeModal();
+          }, 3000); // Close the modal after 3 seconds (adjust as needed)
+        } else {
+          // Handle any errors or display an error message
+          console.error("Reservation creation failed:", response.data);
+        }
+      })
+      .catch((error) => {
+        console.error("Error creating reservation:", error);
+      });
   };
   return (
     <div>

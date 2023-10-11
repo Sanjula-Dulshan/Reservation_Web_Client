@@ -41,7 +41,7 @@ export default function Home() {
         <section className="traveler-section">
           <h2>Reservations</h2>
           <p>All Reservations</p>
-          <Link to="/login" className="btn btn-primary">
+          <Link to="/reservations" className="btn btn-primary">
             Manage Reservations
           </Link>
         </section>
