@@ -21,7 +21,6 @@ function App() {
 
   const isAgent = localStorage.getItem("isAgent_current");
   const isBackOffice = localStorage.getItem("isBackOffice_current");
-  const isTraveler = localStorage.getItem("isTraveler_current");
 
   return (
     <BrowserRouter>
@@ -32,11 +31,11 @@ function App() {
         <Route path="/" exact element={<Login />} />
 
         {/* Agent or Traveler */}
-        <Route path="/home" exact element={isTraveler === 'true' || isAgent === 'true' || isBackOffice === 'true' ? <Home /> : <Login />} />
-        <Route path="/travelers" exact element={isTraveler === 'true' || isAgent === 'true' || isBackOffice === 'true' ? <TravelerInquiries /> : <Login />} />
-        <Route path="/availability" exact element={isTraveler === 'true' || isAgent === 'true' ? <AvailableTrains /> : <Login />} />
-        <Route path="/confirmation" exact element={isTraveler === 'true' || isAgent === 'true' ? <Confirmation /> : <Login />} />
-        <Route path="/reservation" exact element={isTraveler === 'true' || isAgent === 'true' ? <AllReservations /> : <Login />} />
+        <Route path="/home" exact element={isAgent === 'true' || isBackOffice === 'true' ? <Home /> : <Login />} />
+        <Route path="/travelers" exact element={isAgent === 'true' || isBackOffice === 'true' ? <TravelerInquiries /> : <Login />} />
+        <Route path="/availability" exact element={isAgent === 'true' ? <AvailableTrains /> : <Login />} />
+        <Route path="/confirmation" exact element={isAgent === 'true' ? <Confirmation /> : <Login />} />
+        <Route path="/reservation" exact element={isAgent === 'true' ? <AllReservations /> : <Login />} />
         <Route path="/register" exact element={<Register />} />
 
         {/* BackOffice */}
