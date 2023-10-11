@@ -8,10 +8,13 @@ import { MdAirlineSeatReclineExtra } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { BASE } from "../constants";
+import Modal from "react-modal";
 
 export default function All_Train_Schedules() {
   const [schedules, setSchedules] = useState([]);
   const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [response, setresponse] = useState("");
 
   //Get all train schedules
   useEffect(() => {
@@ -25,10 +28,38 @@ export default function All_Train_Schedules() {
       });
   }, []);
 
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   //Update Train Schedule with id
   const updateSchedule = (id) => {
     localStorage.setItem("selectedScheduleId", id);
     navigate("/updateschedule");
+  };
+
+  //update Status
+  const updateStatus = (id) => {
+    axios
+      .patch(`${BASE}/api/train/updateStatus/${id}`)
+      .then((res) => {
+        // Display the modal
+        setresponse(res.data);
+
+        openModal();
+
+        setTimeout(() => {
+          closeModal();
+        }, 3000);
+        window.location.reload();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   //Format the time
@@ -46,6 +77,14 @@ export default function All_Train_Schedules() {
   return (
     <div className="all-schedules-container">
       <h1 className="schedules-title">All Train Schedules</h1>
+      <div className="title-and-button-container">
+        <button
+          className="btn btn-primary btn-sm add-schedule-button"
+          onClick={() => navigate("/schedule")}
+        >
+          Add New Schedule
+        </button>
+      </div>
       <div className="schedule-cards">
         {schedules.map((schedule) => (
           <div className="schedule-card" key={schedule.id}>
@@ -125,6 +164,9 @@ export default function All_Train_Schedules() {
                   className={`btn ${
                     schedule.isActive ? "btn-resolved" : "btn-pending"
                   }`}
+                  onClick={() => {
+                    updateStatus(schedule.id);
+                  }}
                 >
                   {schedule.isActive ? "Active" : "Inactive"}
                 </button>
@@ -132,6 +174,17 @@ export default function All_Train_Schedules() {
             </div>
           </div>
         ))}
+        {/* Modal for success */}
+        <Modal
+          isOpen={isModalOpen}
+          onRequestClose={closeModal}
+          className="success-modal"
+        >
+          <div className="modal-content">
+            <h2>{response}</h2>
+            <p></p>
+          </div>
+        </Modal>
       </div>
     </div>
   );
