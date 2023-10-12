@@ -5,6 +5,8 @@ import axios from "axios";
 import { BASE } from "../constants";
 import Modal from "react-modal";
 import { useNavigate } from "react-router-dom";
+import { Store, store } from "react-notifications-component";
+import "react-notifications-component/dist/theme.css";
 
 Modal.setAppElement("#root");
 
@@ -41,12 +43,50 @@ const Registration = () => {
       // Make a POST request to the server
       const response = await axios.post(`${BASE}/api/user`, userData);
 
-      // Check the response status
       if (response.status === 200) {
-        console.log("User registration successful:", response.data);
-        openModal();
+        if (response.data.message === "User registered successfully.") {
+          console.log("User registration successful:", response.data);
+          Store.addNotification({
+            title: "Registration Successful!",
+            message: "You can now log in.",
+            type: "success",
+            insert: "top",
+            container: "top-right",
+            dismiss: {
+              duration: 3000,
+              onScreen: true,
+            },
+          });
+          navigate("/home");
+        } else if (response.data.message === "User NIC already exists.") {
+          // Display the NIC already exists error message
+          Store.addNotification({
+            title: "Registration Failed!",
+            message: "User NIC already exists.",
+            type: "danger",
+            insert: "top",
+            container: "top-right",
+            dismiss: {
+              duration: 3000,
+              onScreen: true,
+            },
+          });
+          navigate("/home");
+        }
       } else {
-        console.error("User registration failed:", response.data);
+        {
+          Store.addNotification({
+            title: "Registration Failed!",
+            message: "Please try again later.",
+            type: "danger",
+            insert: "top",
+            container: "top-right",
+            dismiss: {
+              duration: 3000,
+              onScreen: true,
+            },
+          });
+        }
       }
     } catch (error) {
       // Handle any errors that occur during the request

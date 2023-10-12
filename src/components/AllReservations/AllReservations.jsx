@@ -142,15 +142,22 @@ const AllReservations = () => {
     }
   };
 
-  const cancelReservation = (reservation) => {
-    const reservationId = reservation.train_Id;
+  const cancelReservation = (selectedReservation) => {
+    const reservationId = selectedReservation.id;
+    console.log("Selected Reservation:", reservationId);
+
+    const fiveDaysBeforeReservation = new Date(selectedReservation.date);
+    console.log("Five Days Before Reservation:", fiveDaysBeforeReservation);
     const currentDate = new Date();
 
-    // Calculate the date 5 days before the reservation date
-    const fiveDaysBeforeReservation = new Date(reservation.date);
-    fiveDaysBeforeReservation.setDate(fiveDaysBeforeReservation.getDate() - 5);
+    // Calculate the time difference in milliseconds
+    const timeDiff = currentDate - fiveDaysBeforeReservation;
 
-    if (currentDate >= fiveDaysBeforeReservation) {
+    // Convert the time difference to days
+    const daysDiff = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+    console.log("Date Difference in Days:", daysDiff);
+
+    if (daysDiff > 5) {
       Store.addNotification({
         title: "Cannot Cancel Reservation",
         message:
