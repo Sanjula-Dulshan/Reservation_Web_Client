@@ -24,6 +24,11 @@ const BookingModal = ({ isOpen, onRequestClose }) => {
   const [showWarning, setShowWarning] = useState(false);
 
   const [nic, setNic] = useState("");
+
+  // Calculate today's date in the format yyyy-MM-dd
+  const today = new Date();
+  const todayFormatted = today.toISOString().split("T")[0];
+
   const navigate = useNavigate();
   const handleSubmit = async () => {
     try {
@@ -198,6 +203,7 @@ const BookingModal = ({ isOpen, onRequestClose }) => {
           value={date}
           onChange={(e) => setDate(e.target.value)}
           className="input-field"
+          min={todayFormatted}
         />
 
         <label>Number of Passengers:</label>
