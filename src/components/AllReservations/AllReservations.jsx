@@ -73,53 +73,72 @@ const AllReservations = () => {
         return;
       }
 
-      // Convert the ISO 8601 date string to a Date object
-      const reservationDate = new Date("2023-10-11T18:30:00.000+00:00");
-
-      // Calculate the current date
+      const fiveDaysBeforeReservation = new Date(selectedReservation.date);
       const currentDate = new Date();
 
-      // Calculate the date 5 days before the reservation date
-      const fiveDaysBeforeReservation = new Date(reservationDate);
-      fiveDaysBeforeReservation.setDate(reservationDate.getDate() - 5);
+      // Calculate the time difference in milliseconds
+      const timeDiff = currentDate - fiveDaysBeforeReservation;
 
-      console.log(fiveDaysBeforeReservation);
+      // Convert the time difference to days
+      const daysDiff = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
 
-      // Check if the current date is at least 5 days before the reservation date
-      if (currentDate < fiveDaysBeforeReservation) {
-        // Allow the update since it's at least 5 days before the reservation date
-        console.log("You can update the reservation.");
+      console.log("Date Difference in Days:", daysDiff);
+
+      // Check if the difference is greater than 5 days
+      if (daysDiff < 5) {
+        // The difference is greater than 5 days, you can proceed
+        // Prepare the updated data
+        const updatedData = {
+          ...selectedReservation,
+          noOfSeats: updatedNoOfSeats,
+        };
+
+        axios
+          .put(`${BASE}/api/reservation/${reservationId}`, updatedData)
+          .then((response) => {
+            if (response.status === 200) {
+              // Reservation updated successfully
+              Store.addNotification({
+                title: "Reservation Updated",
+                message: "The reservation has been updated successfully.",
+                animationIn: ["animate__animated", "animate__fadeIn"],
+                animationOut: ["animate__animated", "animate__fadeOut"],
+                type: "success",
+                insert: "top",
+                container: "top-right",
+
+                dismiss: {
+                  duration: 2500,
+                  onScreen: true,
+                  showIcon: true,
+                },
+
+                width: 400,
+              });
+              // Reload reservations
+              axios.get(`${BASE}/api/reservation`).then((response) => {
+                const filteredReservation = response.data.filter(
+                  (r) => r.isAgent
+                );
+
+                setReservations(filteredReservation);
+              });
+              console.log("Reservation updated:", response.data);
+              setUpdateModalOpen(false);
+            } else {
+              // Handle any errors or display an error message
+              console.error("Reservation update failed:", response.data);
+            }
+          })
+          .catch((error) => {
+            console.error("Error updating reservation:", error);
+          });
       } else {
-        // Display an error message
-        console.log(
-          "You are not allowed to update the reservation within 5 days of the reservation date."
+        // The difference is 5 days or less, not allowed to update
+        showErrorNotification(
+          "You are not allowed to update the number of seats after 5 days of the reservation date."
         );
       }
-
-      // Prepare the updated data
-      const updatedData = {
-        ...selectedReservation,
-        noOfSeats: updatedNoOfSeats,
-      };
-
-      axios
-        .put(`${BASE}/api/reservation/${reservationId}`, updatedData)
-        .then((response) => {
-          if (response.status === 200) {
-            // Reservation updated successfully
-            console.log("Reservation updated:", response.data);
-            setUpdateModalOpen(false);
-
-            // Optionally, update the selected reservation's noOfSeats in your state
-            // ...
-          } else {
-            // Handle any errors or display an error message
-            console.error("Reservation update failed:", response.data);
-          }
-        })
-        .catch((error) => {
-          console.error("Error updating reservation:", error);
-        });
     }
   };
 

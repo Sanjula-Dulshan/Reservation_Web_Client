@@ -4,6 +4,8 @@ import { FaIdCard, FaEnvelope } from "react-icons/fa";
 import axios from "axios";
 import { BASE } from "../constants";
 import Modal from "react-modal";
+import { Store, store } from "react-notifications-component";
+import "react-notifications-component/dist/theme.css";
 
 const TravelerInquiries = () => {
   const [users, setUsers] = useState([]);
@@ -20,14 +22,14 @@ const TravelerInquiries = () => {
   const openUpdateModal = (data) => {
     setIsUpdateModalOpen(true);
     setUpdateData(data); // Set the data to update
-    console.log("19 Update Data:", data);
   };
 
   const closeUpdateModal = () => {
     setIsUpdateModalOpen(false);
   };
 
-  const handleSave = () => {
+  const handleSave = (event) => {
+    event.preventDefault();
     const updatedUserData = {
       ...users,
       name: updateData.name,
@@ -62,10 +64,23 @@ const TravelerInquiries = () => {
     axios
       .delete(`${BASE}/api/user/${nic}`)
       .then((res) => {
-        // Display the modal
-        setResponse(`User with NIC ${nic} deleted successfully.`);
+        Store.addNotification({
+          title: `User with NIC ${nic} deleted successfully.`,
 
-        openModal();
+          animationIn: ["animate__animated", "animate__fadeIn"],
+          animationOut: ["animate__animated", "animate__fadeOut"],
+          type: "success",
+          insert: "top",
+          container: "top-right",
+
+          dismiss: {
+            duration: 2500,
+            onScreen: true,
+            showIcon: true,
+          },
+
+          width: 400,
+        });
 
         // Refresh user data after deletion
         fetchUsers();
@@ -213,11 +228,7 @@ const TravelerInquiries = () => {
             </div>
             {/* Add other form fields */}
             <div className="button-container">
-              <button
-                type="submit"
-                className="btn btn-primary"
-                onClick={() => handleSave()}
-              >
+              <button type="submit" className="btn btn-primary">
                 Save
               </button>
 

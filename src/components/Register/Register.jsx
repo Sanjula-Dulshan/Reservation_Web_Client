@@ -35,6 +35,7 @@ const Registration = () => {
         password: formData.password,
         nic: formData.nic,
         isAgent: true,
+        isTraveler: true,
       };
 
       // Make a POST request to the server
