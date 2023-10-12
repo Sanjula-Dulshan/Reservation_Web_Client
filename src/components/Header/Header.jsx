@@ -3,6 +3,11 @@ import { Link } from "react-router-dom";
 import "./Header.css";
 
 const Header = () => {
+  const firstlogin = localStorage.getItem("firstlogin");
+  const logout = () => {
+    localStorage.clear();
+    window.location.href = "/";
+  };
   return (
     <header className="header">
       <i className="fas fa-train train-icon"></i>
@@ -10,6 +15,12 @@ const Header = () => {
         <Link to="/">Home</Link>
         <Link to="/about">About</Link>
         <Link to="/contact">Contact</Link>
+        {firstlogin === "true" && (
+          <a href="/" onClick={logout}>
+            {" "}
+            Logout
+          </a>
+        )}
       </nav>
     </header>
   );
