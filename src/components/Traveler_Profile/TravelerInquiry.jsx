@@ -18,6 +18,7 @@ const TravelerInquiries = () => {
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [response, setresponse] = useState("");
+  const backoffice = localStorage.getItem("isBackOffice_current");
 
   const openUpdateModal = (data) => {
     setIsUpdateModalOpen(true);
@@ -181,16 +182,18 @@ const TravelerInquiries = () => {
               </button>
 
               {/* Display Button Only for backOffice */}
-              <button
-                className={`${
-                  user.isActive ? "status-button-two" : "status-button"
-                }`}
-                onClick={() => {
-                  updateStatus(user.nic);
-                }}
-              >
-                {user.isActive ? "Active" : "Inactive"}
-              </button>
+              {backoffice === "true" && (
+                <button
+                  className={`${
+                    user.isActive ? "status-button-two" : "status-button"
+                  }`}
+                  onClick={() => {
+                    updateStatus(user.nic);
+                  }}
+                >
+                  {user.isActive ? "Active" : "Inactive"}
+                </button>
+              )}
               {/* **** */}
             </div>
           </div>

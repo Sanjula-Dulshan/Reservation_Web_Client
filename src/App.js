@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import "/node_modules/bootstrap/dist/css/bootstrap.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
@@ -18,9 +18,8 @@ import AllSchedules from "./components/All_Train_Schedules/AllTrainSchedules";
 import BackOffice from "./components/BackOffice/BackOffice";
 
 function App() {
-  //   const isAgent = localStorage.getItem("isAgent") === "true";
-  //   const isBackOffice = localStorage.getItem("isBackOffice") === "true";
-  //   const isTraveler = localStorage.getItem("isTraveler") === "true";
+  const isAgent = localStorage.getItem("isAgent_current");
+  const isBackOffice = localStorage.getItem("isBackOffice_current");
 
   return (
     <BrowserRouter>
@@ -28,30 +27,65 @@ function App() {
 
       <ReactNotifications />
       <Routes>
-        <Route path="/" element={<Login />} />
+        <Route path="/" exact element={<Login />} />
 
-        {/* {isAgent && isTraveler && (
-          <> */}
-        <Route path="/home" element={<Home />} />
-        <Route path="/travelers" element={<TravelerInquiries />} />
-        <Route path="/availability" element={<AvailableTrains />} />
-        <Route path="/confirmation" element={<Confirmation />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/reservations" element={<AllReservations />} />
+        {/* Agent or Traveler */}
+        <Route
+          path="/home"
+          exact
+          element={
+            isAgent === "true" || isBackOffice === "true" ? <Home /> : <Login />
+          }
+        />
+        <Route
+          path="/travelers"
+          exact
+          element={
+            isAgent === "true" || isBackOffice === "true" ? (
+              <TravelerInquiries />
+            ) : (
+              <Login />
+            )
+          }
+        />
+        <Route
+          path="/availability"
+          exact
+          element={isAgent === "true" ? <AvailableTrains /> : <Login />}
+        />
+        <Route
+          path="/confirmation"
+          exact
+          element={isAgent === "true" ? <Confirmation /> : <Login />}
+        />
+        <Route
+          path="/reservation"
+          exact
+          element={isAgent === "true" ? <AllReservations /> : <Login />}
+        />
+        <Route path="/register" exact element={<Register />} />
 
-        {/* </>
-        )} */}
-
-        {/* {isBackOffice && (
-          <> */}
-
-        <Route path="/backoffice" exact element={<BackOffice />} />
-
-        <Route path="/schedule" exact element={<Schedule />} />
-        <Route path="/updateschedule" exact element={<UpdateSchedule />} />
-        <Route path="/allschedules" exact element={<AllSchedules />} />
-        {/* </>
-        )} */}
+        {/* BackOffice */}
+        <Route
+          path="/backoffice"
+          exact
+          Component={isBackOffice ? BackOffice : Login}
+        />
+        <Route
+          path="/schedule"
+          exact
+          Component={isBackOffice ? Schedule : Login}
+        />
+        <Route
+          path="/updateschedule"
+          exact
+          Component={isBackOffice ? UpdateSchedule : Login}
+        />
+        <Route
+          path="/allschedules"
+          exact
+          Component={isBackOffice ? AllSchedules : Login}
+        />
 
         {/* {!isAgent && !isBackOffice && <Navigate to="/login" />} */}
       </Routes>
