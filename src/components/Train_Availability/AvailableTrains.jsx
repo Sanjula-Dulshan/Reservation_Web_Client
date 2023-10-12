@@ -22,6 +22,7 @@ const AvailableTrains = () => {
   const ticketPrice = queryParams.get("ticketPrice");
   const totalPrice = queryParams.get("totalPrice");
   const seats = queryParams.get("seats");
+  const date = queryParams.get("date");
 
   // Parse the trainList query parameter into an array
   const trainList = JSON.parse(queryParams.get("trainList"));
@@ -36,8 +37,8 @@ const AvailableTrains = () => {
   console.log("Ticket Price:", ticketPrice);
   console.log("Total Price:", totalPrice);
   console.log("Seats:", seats);
-
   console.log("Train List:", trainList);
+  console.log("Date:", date);
 
   const steps = [
     "Home",
@@ -65,7 +66,7 @@ const AvailableTrains = () => {
     if (selectedRow) {
       // Build the URL with query parameters
       const nextUrl = `/confirmation?trainId=${selectedRow.trainId}&trainName=${selectedRow.trainName}&startTime=${selectedRow.startTime}&endTime=${selectedRow.endTime}&noOfSeats=
-      ${selectedRow.noOfSeats}&nic=${nic}&ticketPrice=${ticketPrice}&totalPrice=${totalPrice}&start=${selectedRow.start}&end=${selectedRow.end}&seats=${seats}
+      ${selectedRow.noOfSeats}&nic=${nic}&ticketPrice=${ticketPrice}&totalPrice=${totalPrice}&start=${selectedRow.start}&end=${selectedRow.end}&seats=${seats}&date=${date}
       `;
 
       // Navigate to the next page with the data

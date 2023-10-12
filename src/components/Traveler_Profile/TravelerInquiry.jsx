@@ -4,10 +4,14 @@ import { FaIdCard, FaEnvelope } from "react-icons/fa";
 import axios from "axios";
 import { BASE } from "../constants";
 import Modal from "react-modal";
+import { Store, store } from "react-notifications-component";
+import "react-notifications-component/dist/theme.css";
 
 const TravelerInquiries = () => {
   const [users, setUsers] = useState([]);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const [deletionConfirmation, setDeletionConfirmation] = useState(null);
+  const [responses, setResponse] = useState("");
   const [updateData, setUpdateData] = useState({
     name: "",
     email: "",
@@ -19,45 +23,98 @@ const TravelerInquiries = () => {
   const openUpdateModal = (data) => {
     setIsUpdateModalOpen(true);
     setUpdateData(data); // Set the data to update
-    console.log("19 Update Data:", data);
   };
 
   const closeUpdateModal = () => {
     setIsUpdateModalOpen(false);
   };
 
-  const handleSave = () => {
+  const handleSave = (event) => {
+    event.preventDefault();
     const updatedUserData = {
+      ...users,
       name: updateData.name,
       email: updateData.email,
+      isAgent: true,
     };
 
     console.log("Updated User Data:", updatedUserData);
 
-    // axios
-    //   .put(`${BASE}/api/user/${updateData.nic}`, updatedUserData)
-    //   .then((response) => {
-    //     console.log("User updated:", response.data);
-    //   })
-    //   .catch((error) => {
-    //     console.error("Error updating user:", error);
-    //   });
+    axios
+      .put(`${BASE}/api/user/${updateData.nic}`, updatedUserData)
+      .then((response) => {
+        console.log("User updated:", response.data);
+
+        fetchUsers();
+      })
+      .catch((error) => {
+        console.error("Error updating user:", error);
+      });
   };
 
-  useEffect(() => {
+  const deleteUser = (nic) => {
+    // Set the confirmation for deletion
+    setDeletionConfirmation({
+      nic: nic,
+      isConfirmed: false,
+    });
+  };
+
+  const confirmDeletion = (nic) => {
+    // Perform the deletion when confirmed
+    axios
+      .delete(`${BASE}/api/user/${nic}`)
+      .then((res) => {
+        Store.addNotification({
+          title: `User with NIC ${nic} deleted successfully.`,
+
+          animationIn: ["animate__animated", "animate__fadeIn"],
+          animationOut: ["animate__animated", "animate__fadeOut"],
+          type: "success",
+          insert: "top",
+          container: "top-right",
+
+          dismiss: {
+            duration: 2500,
+            onScreen: true,
+            showIcon: true,
+          },
+
+          width: 400,
+        });
+
+        // Refresh user data after deletion
+        fetchUsers();
+
+        setTimeout(() => {
+          closeModal();
+        }, 3000);
+      })
+      .catch((err) => {
+        console.log(err);
+        // Handle the error
+      });
+
+    // Close the deletion confirmation
+    setDeletionConfirmation(null);
+  };
+
+  const fetchUsers = () => {
     axios
       .get(`${BASE}/api/user`)
-      .then((response) => {
-        const filteredUsers = response.data.filter(
+      .then((responses) => {
+        const filteredUsers = responses.data.filter(
           (user) => user.isTraveler && user.isAgent
         );
-
         setUsers(filteredUsers);
-        console.log("Filtered Users:", filteredUsers);
       })
       .catch((error) => {
         console.error("Error fetching users:", error);
       });
+  };
+
+  useEffect(() => {
+    fetchUsers();
   }, []);
 
   const openModal = () => {
@@ -90,7 +147,7 @@ const TravelerInquiries = () => {
 
   return (
     <div className="traveler-inquiries">
-      <h1 className="inquiries-title">Traveler Profiles</h1>
+      <h1 className="inquiries-title-profile">Traveler Profiles</h1>
       <div className="inquiry-cards">
         {users.map((user, index) => (
           <div className="inquiry-card" key={index}>
@@ -117,7 +174,12 @@ const TravelerInquiries = () => {
               >
                 Update
               </button>
-              <button className="delete-button">Delete</button>
+              <button
+                className="delete-button"
+                onClick={() => deleteUser(user.nic)}
+              >
+                Delete
+              </button>
 
               {/* Display Button Only for backOffice */}
               {backoffice === "true" && (
@@ -169,11 +231,7 @@ const TravelerInquiries = () => {
             </div>
             {/* Add other form fields */}
             <div className="button-container">
-              <button
-                type="submit"
-                className="btn btn-primary"
-                onClick={() => handleSave()}
-              >
+              <button type="submit" className="btn btn-primary">
                 Save
               </button>
 
@@ -182,6 +240,32 @@ const TravelerInquiries = () => {
               </button>
             </div>
           </form>
+        </Modal>
+        {/* Deletion Confirmation Modal */}
+        <Modal
+          isOpen={deletionConfirmation !== null}
+          onRequestClose={() => setDeletionConfirmation(null)}
+          className="deletion-confirmation-modal"
+        >
+          <h2>Confirm Deletion</h2>
+          <p>
+            Are you sure you want to delete the user with NIC:{" "}
+            {deletionConfirmation?.nic}?
+          </p>
+          <div className="button-container">
+            <button
+              className="btn btn-danger"
+              onClick={() => confirmDeletion(deletionConfirmation?.nic)}
+            >
+              Confirm Deletion
+            </button>
+            <button
+              className="btn btn-primary"
+              onClick={() => setDeletionConfirmation(null)}
+            >
+              Cancel
+            </button>
+          </div>
         </Modal>
         {/* Modal for success */}
         <Modal

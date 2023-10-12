@@ -4,6 +4,8 @@ import UpdateModal from "./UpdateModal";
 
 import axios from "axios";
 import { BASE } from "../constants";
+import { Store, store } from "react-notifications-component";
+import "react-notifications-component/dist/theme.css";
 
 const AllReservations = () => {
   const [reservations, setReservations] = useState([]);
@@ -44,39 +46,195 @@ const AllReservations = () => {
     setUpdateModalOpen(true);
   };
 
-  // Function to save the updated noOfSeats and close the update modal
+  // Function to display an error notification
+  const showErrorNotification = (message) => {
+    Store.addNotification({
+      title: "Error",
+      message: message,
+      type: "danger",
+      container: "top-right",
+      insert: "top",
+      dismiss: { duration: 5000 },
+    });
+  };
+
   const saveUpdatedNoOfSeats = (updatedNoOfSeats) => {
-    // Check if there is a selected reservation
     if (selectedReservation) {
-      // Define the reservation ID
       const reservationId = selectedReservation.id;
-      console.log("id", reservationId); // Replace with the actual property name of the ID in your reservation object
 
-      // Define the updated data with the new noOfSeats value
-      const updatedData = {
-        noOfSeats: updatedNoOfSeats,
-      };
+      // Define the maximum number of allowed seat updates (4 in this case)
+      const maxAllowedSeatUpdates = 4;
 
-      // Make an API call to update the reservation's noOfSeats
+      // Check if the updated number of seats is valid
+      if (updatedNoOfSeats > maxAllowedSeatUpdates) {
+        showErrorNotification(
+          `You are not allowed to update the number of seats to more than ${maxAllowedSeatUpdates}.`
+        );
+        return;
+      }
+
+      const fiveDaysBeforeReservation = new Date(selectedReservation.date);
+      const currentDate = new Date();
+
+      // Calculate the time difference in milliseconds
+      const timeDiff = currentDate - fiveDaysBeforeReservation;
+
+      // Convert the time difference to days
+      const daysDiff = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+
+      console.log("Date Difference in Days:", daysDiff);
+
+      // Check if the difference is greater than 5 days
+      if (daysDiff < 5) {
+        // The difference is greater than 5 days, you can proceed
+        // Prepare the updated data
+        const updatedData = {
+          ...selectedReservation,
+          noOfSeats: updatedNoOfSeats,
+        };
+
+        axios
+          .put(`${BASE}/api/reservation/${reservationId}`, updatedData)
+          .then((response) => {
+            if (response.status === 200) {
+              // Reservation updated successfully
+              Store.addNotification({
+                title: "Reservation Updated",
+                message: "The reservation has been updated successfully.",
+                animationIn: ["animate__animated", "animate__fadeIn"],
+                animationOut: ["animate__animated", "animate__fadeOut"],
+                type: "success",
+                insert: "top",
+                container: "top-right",
+
+                dismiss: {
+                  duration: 2500,
+                  onScreen: true,
+                  showIcon: true,
+                },
+
+                width: 400,
+              });
+              // Reload reservations
+              axios.get(`${BASE}/api/reservation`).then((response) => {
+                const filteredReservation = response.data.filter(
+                  (r) => r.isAgent
+                );
+
+                setReservations(filteredReservation);
+              });
+              console.log("Reservation updated:", response.data);
+              setUpdateModalOpen(false);
+            } else {
+              // Handle any errors or display an error message
+              console.error("Reservation update failed:", response.data);
+            }
+          })
+          .catch((error) => {
+            console.error("Error updating reservation:", error);
+          });
+      } else {
+        // The difference is 5 days or less, not allowed to update
+        showErrorNotification(
+          "You are not allowed to update the number of seats after 5 days of the reservation date."
+        );
+      }
+    }
+  };
+
+  const cancelReservation = (selectedReservation) => {
+    const reservationId = selectedReservation.id;
+    console.log("Selected Reservation:", reservationId);
+
+    const fiveDaysBeforeReservation = new Date(selectedReservation.date);
+    console.log("Five Days Before Reservation:", fiveDaysBeforeReservation);
+    const currentDate = new Date();
+
+    // Calculate the time difference in milliseconds
+    const timeDiff = currentDate - fiveDaysBeforeReservation;
+
+    // Convert the time difference to days
+    const daysDiff = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+    console.log("Date Difference in Days:", daysDiff);
+
+    if (daysDiff > 5) {
+      Store.addNotification({
+        title: "Cannot Cancel Reservation",
+        message:
+          "You can only cancel reservations at least 5 days before the reservation date.",
+        animationIn: ["animate__animated", "animate__fadeIn"],
+        animationOut: ["animate__animated", "animate__fadeOut"],
+        type: "warning",
+        insert: "top",
+        container: "top-right",
+
+        dismiss: {
+          duration: 2500,
+          onScreen: true,
+          showIcon: true,
+        },
+
+        width: 400,
+      });
+    } else {
       axios
-        .put(`${BASE}/api/reservation/${reservationId}`, updatedData)
+        .delete(`${BASE}/api/reservation/${reservationId}`)
         .then((response) => {
           if (response.status === 200) {
-            // Reservation updated successfully
-            console.log("Reservation updated:", response.data);
+            Store.addNotification({
+              title: "Reservation Cancelled",
+              message: "The reservation has been cancelled.",
+              animationIn: ["animate__animated", "animate__fadeIn"],
+              animationOut: ["animate__animated", "animate__fadeOut"],
+              type: "success",
+              insert: "top",
+              container: "top-right",
 
-            // Close the modal
-            setUpdateModalOpen(false);
+              dismiss: {
+                duration: 2500,
+                onScreen: true,
+                showIcon: true,
+              },
 
-            // Optionally, update the selected reservation's noOfSeats in your state
-            // ...
+              width: 400,
+            });
+
+            // Reload reservations
+            axios
+              .get(`${BASE}/api/reservation`)
+              .then((response) => {
+                const filteredReservation = response.data.filter(
+                  (r) => r.isAgent
+                );
+
+                setReservations(filteredReservation);
+              })
+              .catch((error) => {
+                console.error("Error fetching reservations:", error);
+              });
           } else {
-            // Handle any errors or display an error message
-            console.error("Reservation update failed:", response.data);
+            Store.addNotification({
+              title: "Error",
+              message:
+                "Failed to cancel the reservation. Please try again later.",
+              animationIn: ["animate__animated", "animate__fadeIn"],
+              animationOut: ["animate__animated", "animate__fadeOut"],
+              type: "danger",
+              insert: "top",
+              container: "top-right",
+
+              dismiss: {
+                duration: 2500,
+                onScreen: true,
+                showIcon: true,
+              },
+
+              width: 400,
+            });
           }
         })
         .catch((error) => {
-          console.error("Error updating reservation:", error);
+          console.error("Error cancelling reservation:", error);
         });
     }
   };
@@ -124,29 +282,16 @@ const AllReservations = () => {
               >
                 Update
               </button>
-              <button className="delete-button">Delete</button>
+              <button
+                className="delete-button"
+                onClick={() => cancelReservation(reservation)}
+              >
+                Delete
+              </button>
             </div>
           </div>
         ))}
       </div>
-      {/* Update Modal */}
-      {/* <Modal
-        isOpen={isUpdateModalOpen}
-        onRequestClose={() => setUpdateModalOpen(false)}
-        className="modal-dialog"
-      >
-        <h2>Update No. of Seats</h2>
-        <p>
-          <strong>Current No. of Seats:</strong> {updatedNoOfSeats}
-        </p>
-        <label>New No. of Seats:</label>
-        <input
-          type="number"
-          value={updatedNoOfSeats}
-          onChange={(e) => setUpdatedNoOfSeats(e.target.value)}
-        />
-        <button onClick={saveUpdatedNoOfSeats}>Save</button>
-      </Modal> */}
 
       <UpdateModal
         isOpen={isUpdateModalOpen}
