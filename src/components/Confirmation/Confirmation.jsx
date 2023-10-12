@@ -84,10 +84,11 @@ const PassengerInfo = () => {
             insert: "top",
             container: "top-right",
             dismiss: {
-              duration: 5000,
+              duration: 3000,
               onScreen: true,
             },
           });
+          navigate("/home");
         } else {
           // Show error notification
           Store.addNotification({
@@ -97,7 +98,7 @@ const PassengerInfo = () => {
             insert: "top",
             container: "top-right",
             dismiss: {
-              duration: 5000,
+              duration: 3000,
               onScreen: true,
             },
           });
