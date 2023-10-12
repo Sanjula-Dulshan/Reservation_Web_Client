@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { BASE } from "../constants";
+import { Store } from "react-notifications-component";
+import "react-notifications-component/dist/theme.css";
 
 Modal.setAppElement("#root");
 
@@ -74,16 +76,32 @@ const PassengerInfo = () => {
           // Reservation created successfully
           console.log("Reservation created:", response.data);
 
-          // Display the modal
-          openModal();
-
-          // After a delay, close the modal (you can adjust the delay)
-          setTimeout(() => {
-            closeModal();
-          }, 3000); // Close the modal after 3 seconds (adjust as needed)
+          // Show success notification
+          Store.addNotification({
+            title: "Success!",
+            message: "Reservation created successfully.",
+            type: "success",
+            insert: "top",
+            container: "top-right",
+            dismiss: {
+              duration: 5000,
+              onScreen: true,
+            },
+          });
         } else {
-          // Handle any errors or display an error message
-          console.error("Reservation creation failed:", response.data);
+          // Show error notification
+          Store.addNotification({
+            title: "Error!",
+            message: "Error creating reservation.",
+            type: "danger",
+            insert: "top",
+            container: "top-right",
+            dismiss: {
+              duration: 5000,
+              onScreen: true,
+            },
+          });
+          navigate("/home");
         }
       })
       .catch((error) => {

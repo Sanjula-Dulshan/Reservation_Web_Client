@@ -44,13 +44,11 @@ const BookingModal = ({ isOpen, onRequestClose }) => {
           type: "warning",
           insert: "top",
           container: "top-right",
-
           dismiss: {
             duration: 2500,
             onScreen: true,
             showIcon: true,
           },
-
           width: 400,
         });
         return;
@@ -66,13 +64,11 @@ const BookingModal = ({ isOpen, onRequestClose }) => {
           type: "warning",
           insert: "top",
           container: "top-right",
-
           dismiss: {
             duration: 2500,
             onScreen: true,
             showIcon: true,
           },
-
           width: 400,
         });
 
@@ -101,18 +97,40 @@ const BookingModal = ({ isOpen, onRequestClose }) => {
       const response = await axios.post(apiUrl, data);
 
       if (response.status === 200) {
-        console.log("Booking successful:", response.data);
+        if (response.data.trainList.length === 0) {
+          // No trains are available for the specified route
+          Store.addNotification({
+            title: "No Trains Available",
+            message:
+              "Sorry, there are no trains available for the selected route.",
+            animationIn: ["animate__animated", "animate__fadeIn"],
+            animationOut: ["animate__animated", "animate__fadeOut"],
+            type: "warning",
+            insert: "top",
+            container: "top-right",
+            dismiss: {
+              duration: 2500,
+              onScreen: true,
+              showIcon: true,
+            },
+            width: 400,
+          });
+          navigate("/home");
+        } else {
+          // Trains are available, proceed with the booking
+          console.log("Booking successful:", response.data);
 
-        const trainListJSONString = JSON.stringify(response.data.trainList);
+          const trainListJSONString = JSON.stringify(response.data.trainList);
 
-        console.log("Train List Query String:", trainListJSONString);
-        navigate(
-          `/availability?nic=${nic}&ticketPrice=${
-            response.data.ticketPrice
-          }&trainList=${encodeURIComponent(trainListJSONString)}&totalPrice=${
-            response.data.totalPrice
-          }&seats=${noOfSeats}&date=${date}`
-        );
+          console.log("Train List Query String:", trainListJSONString);
+          navigate(
+            `/availability?nic=${nic}&ticketPrice=${
+              response.data.ticketPrice
+            }&trainList=${encodeURIComponent(trainListJSONString)}&totalPrice=${
+              response.data.totalPrice
+            }&seats=${noOfSeats}&date=${date}`
+          );
+        }
       } else {
         console.error("Booking failed:", response.data);
       }
