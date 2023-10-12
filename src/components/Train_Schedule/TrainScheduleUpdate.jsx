@@ -222,7 +222,7 @@ export default function TrainSchedule() {
                       >
                         Station Name
                       </label>
-                      <input
+                      {/* <input
                         type="text"
                         className="form-control"
                         id={`stationName-${index}`}
@@ -231,7 +231,27 @@ export default function TrainSchedule() {
                         required
                         value={row.stationName}
                         onChange={(e) => handleInputChange(e, index)}
-                      />
+                      /> */}
+                      <select
+                        className="form-control"
+                        id={`stationName-${index}`}
+                        name="stationName"
+                        placeholder="Enter Station Name"
+                        required
+                        value={row.stationName}
+                        onChange={(e) => handleInputChange(e, index)}
+                      >
+                        <option value="weligama">Weligama</option>
+                        <option value="galle">Galle</option>
+                        <option value="hikkaduwa">Hikkaduwa</option>
+                        <option value="ambalangoda">Ambalangoda</option>
+                        <option value="aluthgama">Aluthgama</option>
+                        <option value="kalutara">Kalutara</option>
+                        <option value="panadura">Panadura</option>
+                        <option value="moratuwa">Moratuwa</option>
+                        <option value="dehiwala">Dehiwala</option>
+                        <option value="fort">Colombo Fort</option>
+                      </select>
                     </div>
                     <div className="col-md-4 mb-3">
                       <label

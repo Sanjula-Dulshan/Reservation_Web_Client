@@ -158,7 +158,7 @@ export default function TrainSchedule() {
                       <label htmlFor="stationName" className="form-label">
                         Station Name
                       </label>
-                      <input
+                      {/* <input
                         type="text"
                         className="form-control"
                         placeholder="Enter Station Name"
@@ -169,7 +169,27 @@ export default function TrainSchedule() {
                           updatedRows[index].stationName = e.target.value;
                           setStations(updatedRows);
                         }}
-                      />
+                      /> */}
+                      <select
+                        value={row.stationName}
+                        onChange={(e) => {
+                          const updatedRows = [...stations];
+                          updatedRows[index].stationName = e.target.value;
+                          setStations(updatedRows);
+                        }}
+                        className="input-field"
+                      >
+                        <option value="weligama">Weligama</option>
+                        <option value="galle">Galle</option>
+                        <option value="hikkaduwa">Hikkaduwa</option>
+                        <option value="ambalangoda">Ambalangoda</option>
+                        <option value="aluthgama">Aluthgama</option>
+                        <option value="kalutara">Kalutara</option>
+                        <option value="panadura">Panadura</option>
+                        <option value="moratuwa">Moratuwa</option>
+                        <option value="dehiwala">Dehiwala</option>
+                        <option value="fort">Colombo Fort</option>
+                      </select>
                     </div>
                     <div className="col-md-4 mb-3">
                       <label htmlFor="time" className="form-label">
