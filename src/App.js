@@ -3,7 +3,8 @@ import "./App.css";
 import "/node_modules/bootstrap/dist/css/bootstrap.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import Home from "./components/Dashboard/Home";
-import TravelerInquiries from "./components/Traveler_Inquiry/TravelerInquiry";
+import TravelerInquiries from "./components/Traveler_Profile/TravelerInquiry";
+
 import AvailableTrains from "./components/Train_Availability/AvailableTrains";
 import Header from "./components/Header/Header";
 import Confirmation from "./components/Confirmation/Confirmation";
@@ -37,9 +38,9 @@ function App() {
         <Route path="/confirmation" element={<Confirmation />} />
         <Route path="/register" element={<Register />} />
         <Route path="/reservations" element={<AllReservations />} />
+
         {/* </>
         )} */}
-
 
         {/* {isBackOffice && (
           <> */}

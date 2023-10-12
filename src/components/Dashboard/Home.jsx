@@ -25,8 +25,8 @@ export default function Home() {
       </section>
       <main>
         <section className="traveler-section">
-          <h2>Traveler Assistance</h2>
-          <p>Assist travelers with their reservations.</p>
+          <h2>Travel Management</h2>
+          <p>Manage travelers with their reservations.</p>
           <Link to="/travelers" className="btn btn-primary">
             Manage Travelers
           </Link>
