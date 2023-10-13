@@ -16,7 +16,6 @@ const AvailableTrains = () => {
     const options = { hour: "numeric", minute: "numeric", hour12: true };
     return new Date(timeString).toLocaleTimeString(undefined, options);
   };
-  // Access the data from the URL parameters
 
   const nic = queryParams.get("nic");
   const ticketPrice = queryParams.get("ticketPrice");
@@ -32,7 +31,6 @@ const AvailableTrains = () => {
 
   console.log("Train List new:", trainList);
 
-  // Now you can use start, end, date, seats, and trainList in your component
   console.log("Nic:", nic);
   console.log("Ticket Price:", ticketPrice);
   console.log("Total Price:", totalPrice);
@@ -48,14 +46,6 @@ const AvailableTrains = () => {
     "Ticket Summary",
   ];
 
-  // const handleTrainClick = (train) => {
-  //   if (selectedTrain === train) {
-  //     // If the clicked row is already selected, unselect it
-  //     setSelectedTrain(null);
-  //   } else {
-  //     setSelectedTrain(train); // Otherwise, select the clicked row
-  //   }
-  // };
   const handleTrainClick = (train) => {
     setSelectedTrain(train);
     setSelectedRow(train);
