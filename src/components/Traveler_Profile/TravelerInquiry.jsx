@@ -3,15 +3,17 @@ import "./TravelerInquiry.css";
 import { FaIdCard, FaEnvelope } from "react-icons/fa";
 import axios from "axios";
 import { BASE } from "../constants";
+
 import Modal from "react-modal";
 import { Store, store } from "react-notifications-component";
 import "react-notifications-component/dist/theme.css";
 
-const TravelerInquiries = () => {
+const TravelerProfile = () => {
   const [users, setUsers] = useState([]);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [deletionConfirmation, setDeletionConfirmation] = useState(null);
   const [responses, setResponse] = useState("");
+  const [filteredUsers, setFilteredUsers] = useState([]);
   const [updateData, setUpdateData] = useState({
     name: "",
     email: "",
@@ -31,11 +33,15 @@ const TravelerInquiries = () => {
 
   const handleSave = (event) => {
     event.preventDefault();
+    console.log("updateData", updateData);
     const updatedUserData = {
-      ...users,
       name: updateData.name,
       email: updateData.email,
+      nic: updateData.nic,
+      password: updateData.password,
+      isTraveler: true,
       isAgent: true,
+      isActive: true,
     };
 
     console.log("Updated User Data:", updatedUserData);
@@ -44,10 +50,38 @@ const TravelerInquiries = () => {
       .put(`${BASE}/api/user/${updateData.nic}`, updatedUserData)
       .then((response) => {
         console.log("User updated:", response.data);
+        Store.addNotification({
+          title: `User updated successfully.`,
 
+          type: "success",
+          insert: "top",
+          container: "top-right",
+          dismiss: {
+            duration: 2500,
+            onScreen: true,
+            showIcon: true,
+          },
+          width: 400,
+        });
         fetchUsers();
+        setTimeout(() => {
+          closeUpdateModal();
+        }, 500);
       })
       .catch((error) => {
+        Store.addNotification({
+          title: `Error updating user.`,
+
+          type: "danger",
+          insert: "top",
+          container: "top-right",
+          dismiss: {
+            duration: 2500,
+            onScreen: true,
+            showIcon: true,
+          },
+          width: 400,
+        });
         console.error("Error updating user:", error);
       });
   };
@@ -107,6 +141,8 @@ const TravelerInquiries = () => {
           (user) => user.isTraveler && user.isAgent
         );
         setUsers(filteredUsers);
+        setFilteredUsers(filteredUsers);
+        console.log("Users new:", filteredUsers);
       })
       .catch((error) => {
         console.error("Error fetching users:", error);
@@ -146,7 +182,7 @@ const TravelerInquiries = () => {
   };
 
   return (
-    <div className="traveler-inquiries">
+    <div className="traveler-inquiries-profile">
       <h1 className="inquiries-title-profile">Traveler Profiles</h1>
       <div className="inquiry-cards">
         {users.map((user, index) => (
@@ -231,13 +267,19 @@ const TravelerInquiries = () => {
             </div>
             {/* Add other form fields */}
             <div className="button-container">
-              <button type="submit" className="btn btn-primary">
-                Save
-              </button>
+              <div className="button-row">
+                <button
+                  type="submit"
+                  className="btn btn-warning"
+                  onClick={handleSave}
+                >
+                  Update
+                </button>
 
-              <button className="btn btn-danger" onClick={closeUpdateModal}>
-                Cancel
-              </button>
+                <button className="btn btn-danger" onClick={closeUpdateModal}>
+                  Cancel
+                </button>
+              </div>
             </div>
           </form>
         </Modal>
@@ -283,4 +325,4 @@ const TravelerInquiries = () => {
   );
 };
 
-export default TravelerInquiries;
+export default TravelerProfile;
