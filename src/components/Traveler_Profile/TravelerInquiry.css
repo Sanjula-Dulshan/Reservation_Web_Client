@@ -2,7 +2,7 @@
   font-size: 28px;
   font-weight: bold;
   margin-bottom: 20px;
-  color: #ffffff;
+  color: #000000;
 }
 
 .inquiry-cards {
@@ -70,12 +70,13 @@
   width: 100%;
 }
 
-.traveler-inquiries {
+.traveler-inquiries-profile {
   background-image: url("../../../train.jpeg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   padding: 20px;
+  height: 100vh;
   text-align: center;
 }
 
@@ -247,4 +248,10 @@
   .deletion-confirmation-modal {
     width: 90%;
   }
+}
+
+.button-row {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
 }
