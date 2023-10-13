@@ -30,6 +30,10 @@ const AllReservations = () => {
       });
   }, []);
 
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
   // Function to handle search input change
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
@@ -62,7 +66,7 @@ const AllReservations = () => {
     if (selectedReservation) {
       const reservationId = selectedReservation.id;
 
-      // Define the maximum number of allowed seat updates (4 in this case)
+      // Define the maximum number of allowed seat updates
       const maxAllowedSeatUpdates = 4;
 
       // Check if the updated number of seats is valid
@@ -86,8 +90,6 @@ const AllReservations = () => {
 
       // Check if the difference is greater than 5 days
       if (daysDiff < 5) {
-        // The difference is greater than 5 days, you can proceed
-        // Prepare the updated data
         const updatedData = {
           ...selectedReservation,
           noOfSeats: updatedNoOfSeats,
@@ -257,11 +259,13 @@ const AllReservations = () => {
             <div className="inquiry-details">
               <h3 className="inquiry-name">{reservation.userId}</h3>
               <p className="inquiry-date">
-                <strong>From Station : </strong> {reservation.fromStation}
+                <strong>From Station : </strong>{" "}
+                {capitalizeFirstLetter(reservation.fromStation)}
               </p>
 
               <p className="inquiry-telephone">
-                <strong>To Station :</strong> {reservation.toStation}
+                <strong>To Station :</strong>{" "}
+                {capitalizeFirstLetter(reservation.toStation)}
               </p>
               <p className="inquiry-telephone">
                 <strong>No of Seats :</strong> {reservation.noOfSeats}
